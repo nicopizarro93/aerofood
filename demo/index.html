@@ -333,7 +333,7 @@ footer .logo{color:var(--night-ink)}
       <div class="hero-copy">
         <span class="eyebrow">Sandwichería &amp; cafetería</span>
         <h1>Sabor que <em>despega.</em></h1>
-        <p class="hero-sub">Churrascos, chacareros y completos hechos al momento, con pan del día y palta de verdad. Y un café para acompañar.</p>
+        <p class="hero-sub">Churrascos, chacareros, completos y chorrillanas hechos al momento, con pan del día y palta de verdad. Y un café para acompañar.</p>
         <div class="hero-cta">
           <a class="btn btn-accent" href="#carta">Ver la carta</a>
           <a class="btn btn-ghost js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Pedir por WhatsApp</a>
@@ -551,7 +551,8 @@ const MENU = [
     {id:"dinamico", code:"AS 206", name:"Dinámico", desc:"Palta, tomate, americana, chucrut y mayo.", price:3290},
     {id:"as", code:"AS 207", name:"As Italiano", desc:"Carne picada a la plancha con palta, tomate y mayo.", price:4490}
   ]},
-  {cat:"Para acompañar", items:[
+  {cat:"Para compartir", items:[
+    {id:"chorrillana", code:"AS 400", name:"Chorrillana", desc:"Papas fritas, carne salteada, longaniza, cebolla y dos huevos fritos. Para 2 personas.", price:12990, img:"img/chorrillana.webp", badge:"Para 2"},
     {id:"papas", code:"AS 401", name:"Papas Fritas", desc:"Porción individual, crujientes y doradas.", price:2990, img:"img/papas.jpg"},
     {id:"papasxl", code:"AS 402", name:"Papas para compartir", desc:"Porción grande con salsas a elección.", price:4490}
   ]},
@@ -576,7 +577,7 @@ const BOARD = [
   {id:"churrasco", status:"Embarcando", cls:""},
   {id:"chacarero", status:"A tiempo", cls:"ok"},
   {id:"doblebacon", status:"Últ. llamada", cls:"last"},
-  {id:"completo", status:"A tiempo", cls:"ok"},
+  {id:"chorrillana", status:"A tiempo", cls:"ok"},
   {id:"cappuccino", status:"Embarcando", cls:""}
 ];
 
