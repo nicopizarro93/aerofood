@@ -11,6 +11,19 @@ Página de muestra para **Aerosandwich**, sandwichería y cafetería. Usa un tem
 - **Visítanos**: horario con indicador "Abierto ahora", dirección y redes.
 - Funciona en celular y computador, con modo claro y oscuro.
 
+## Propuesta para la dueña
+
+`demo/propuesta.html` es una página aparte, para presentar el proyecto. Incluye:
+
+- Diseño de la tarjeta NFC
+- Maquetas en la mesa y en la barra
+- Códigos QR reales
+- Mejoras para Google Maps, Instagram y WhatsApp
+- Ideas extra
+- Plan de 4 semanas
+
+Los enlaces de los QR están en `LINKS`, al final del archivo.
+
 ## Ver la demo
 
 Abre `demo/index.html` en el navegador, o levanta un servidor local:
