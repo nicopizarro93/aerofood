@@ -594,6 +594,7 @@ footer .logo{color:var(--night-ink)}
     <a class="logo" href="#inicio"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
     <nav class="foot-links" aria-label="Más páginas">
       <a href="carta.html" data-carta>Carta completa</a>
+      <a href="terminal.html">Versión 2</a>
       <a href="propuesta.html">Ver propuesta →</a>
     </nav>
     <div class="socials">
@@ -728,7 +729,7 @@ document.querySelectorAll(".js-ig").forEach(a => a.href = `https://instagram.com
 document.querySelectorAll(".js-maps").forEach(a => a.href = CONFIG.mapa);
 document.querySelectorAll(".js-review").forEach(a => a.href = CONFIG.resenaGoogle);
 if (!/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) && location.protocol !== "file:") {
-  const MAP = {"carta.html":"https://claude.ai/artifact/Fiw31rPrUV5dzNZbzs5JzH","propuesta.html":"https://claude.ai/artifact/Mofz8Qjoghx8CT8Yxu1a81"};
+  const MAP = {"carta.html":"https://claude.ai/artifact/Fiw31rPrUV5dzNZbzs5JzH","propuesta.html":"https://claude.ai/artifact/Mofz8Qjoghx8CT8Yxu1a81","terminal.html":"https://claude.ai/artifact/GMNn6wtWWL1LTNU6fb6KRr"};
   document.querySelectorAll("a[href]").forEach(a => { const u = MAP[a.getAttribute("href")]; if (u) { a.href = u; a.target = "_blank"; a.rel = "noopener"; } });
 }
 $("#addr").textContent = CONFIG.direccion; $("#comuna").textContent = CONFIG.comuna;
