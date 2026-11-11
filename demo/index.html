@@ -1,0 +1,725 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aerosandwich</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Aerosandwich: sándwiches, completos y cafetería. Revisa la carta y pide por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: aviation identity. A night "cockpit" hero + departures board, then the menu as boarding-pass cards, table-card mockup for reviews. */
+:root{
+  --bg:#F1F3F6; --surface:#FFFFFF; --surface-2:#E7EBF0; --ink:#121821; --muted:#566271; --line:#D5DBE3;
+  --accent:#F0A83A; --accent-ink:#1B1205; --accent-text:#9C5A06; --sky:#2C6B9E;
+  --night:#0C1015; --night-2:#141A22; --night-ink:#F2EFE8; --night-muted:#9AA5B2; --flap:#1C222B; --flap-ink:#F6C453; --ok:#2E9D5B;
+  --shadow:0 1px 2px rgba(18,24,33,.06),0 8px 24px rgba(18,24,33,.08);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1117; --surface:#151B23; --surface-2:#1C232D; --ink:#EDF0F4; --muted:#9AA6B4; --line:#27303C;
+  --accent:#F2B04A; --accent-ink:#1B1205; --accent-text:#F2B04A; --sky:#8EC5E8;
+  --night:#07090D; --night-2:#10151C; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1117; --surface:#151B23; --surface-2:#1C232D; --ink:#EDF0F4; --muted:#9AA6B4; --line:#27303C;
+  --accent:#F2B04A; --accent-ink:#1B1205; --accent-text:#F2B04A; --sky:#8EC5E8;
+  --night:#07090D; --night-2:#10151C; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);line-height:.95;text-wrap:balance;margin:0;letter-spacing:.01em}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+.sec{padding-block:clamp(56px,8vw,96px)}
+.sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;max-width:640px}
+.sec-head h2{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;text-transform:uppercase}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;border:0;font-weight:600;text-decoration:none;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn svg{width:20px;height:20px;flex:none}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:transparent;color:var(--night-ink);box-shadow:inset 0 0 0 1.5px rgba(242,239,232,.35)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--night-ink)}
+.btn-wa{background:#25D366;color:#06210f}
+.btn-ink{background:var(--ink);color:var(--bg)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--night) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--night-ink);border-bottom:1px solid rgba(255,255,255,.07)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.logo-mark{width:38px;height:38px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink)}
+.logo-mark svg{width:24px;height:24px;transform:rotate(-35deg)}
+.logo-word{font-family:var(--f-display);font-weight:900;font-size:1.6rem;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.logo-word span{color:var(--accent)}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{text-decoration:none;font-size:.95rem;font-weight:500;padding:8px 14px;border-radius:999px;color:var(--night-muted)}
+.nav a:hover{color:var(--night-ink);background:rgba(255,255,255,.06)}
+.top .btn{min-height:42px;padding:0 18px;font-size:.92rem}
+@media (max-width:860px){.nav{display:none}.top .btn{margin-left:auto}}
+@media (max-width:420px){.top .btn .lbl{display:none}.top .btn{width:42px;padding:0}}
+
+/* hero */
+.hero{background:var(--night);color:var(--night-ink);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,rgba(240,168,58,.5),transparent)}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding-block:clamp(40px,6vw,72px) clamp(28px,4vw,48px)}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0;position:relative;z-index:2}
+.hero h1{font-size:clamp(3.6rem,9.5vw,7.4rem);font-weight:900;text-transform:uppercase;line-height:.86}
+.hero h1 em{font-style:normal;color:var(--accent);display:block}
+.hero-sub{color:var(--night-muted);font-size:1.12rem;max-width:30em}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.rating-chip{display:inline-flex;align-items:center;gap:12px;padding:10px 16px 10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);text-decoration:none;align-self:flex-start;font-size:.92rem}
+.rating-chip:hover{background:rgba(255,255,255,.09)}
+.stars{display:flex;gap:2px;color:rgba(255,255,255,.25)}
+.stars svg{width:18px;height:18px}
+.rating-chip b{color:var(--night-ink)}
+.rating-chip small{display:block;color:var(--night-muted);font-size:.8rem}
+.hero-media{position:relative;min-width:0}
+.hero-media img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:22px;-webkit-mask-image:radial-gradient(ellipse 85% 85% at 55% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 85% 85% at 55% 50%,#000 60%,transparent 100%)}
+.tag{position:absolute;left:4%;bottom:6%;background:var(--night-ink);color:#121821;border-radius:12px;padding:12px 16px 12px 14px;display:flex;gap:14px;align-items:center;box-shadow:0 12px 30px rgba(0,0,0,.45);transform:rotate(-3deg)}
+.tag::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--night);box-shadow:0 0 0 3px #d9d4c9}
+.tag .mono{font-size:.68rem;color:#6b5a3e}
+.tag strong{font-family:var(--f-display);font-size:1.5rem;text-transform:uppercase;line-height:1;display:block}
+.tag .price{font-family:var(--f-mono);font-weight:700;font-size:1.05rem;padding-left:14px;border-left:1.5px dashed #b9b1a3}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:28px}.hero-media{order:-1}}
+
+/* departures board */
+.board-band{background:var(--night);color:var(--night-ink);padding-bottom:clamp(40px,6vw,64px)}
+.board{background:var(--night-2);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:18px clamp(12px,2vw,24px) 14px}
+.board-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.board-title{display:flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:800;font-size:1.6rem;text-transform:uppercase;letter-spacing:.04em;color:var(--flap-ink)}
+.board-title svg{width:26px;height:26px}
+.clock{font-family:var(--f-mono);color:var(--night-muted);font-size:.85rem}
+.clock b{color:var(--flap-ink);font-size:1.1rem}
+.board-scroll{overflow-x:auto}
+.board table{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:620px}
+.board th{font-family:var(--f-mono);font-weight:500;font-size:.7rem;letter-spacing:.14em;color:var(--night-muted);text-align:left;padding:0 8px;text-transform:uppercase}
+.board td{padding:0 8px;font-family:var(--f-mono);font-weight:700;font-size:.95rem;text-transform:uppercase;white-space:nowrap}
+.board td:first-child{color:var(--night-muted)}
+.board td.dest a{text-decoration:none}
+.board td.dest a:hover .flap{color:var(--accent)}
+.flaps{display:inline-flex;gap:2px}
+.flap{display:inline-grid;place-items:center;min-width:1.15em;height:1.7em;background:var(--flap);border-radius:3px;color:var(--night-ink);position:relative}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
+.flap.sp{background:transparent}
+.flap.sp::after{display:none}
+.st .flap{color:var(--flap-ink)}
+.st.ok .flap{color:#6BD99A}
+.st.last .flap{color:#FF8A65}
+.flap.flip{animation:flip .09s linear}
+@keyframes flip{50%{transform:scaleY(.1)}}
+.board-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px;font-family:var(--f-mono);font-size:.72rem;color:var(--night-muted);letter-spacing:.06em;text-transform:uppercase}
+
+/* menu */
+.chips{position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-bottom:28px}
+.chips-row{display:flex;gap:8px;overflow-x:auto;padding-block:12px;scrollbar-width:none}
+.chips-row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:.92rem;font-weight:600;text-decoration:none;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cat{margin-bottom:56px}
+.cat-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.cat-head h3{font-size:clamp(2rem,4vw,2.8rem);font-weight:900;text-transform:uppercase}
+.cat-head .mono{color:var(--muted);margin-left:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-bottom:12px}
+.card{background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative}
+.card-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--surface-2)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.card:hover .card-img img{transform:scale(1.04)}
+.badge{position:absolute;top:12px;left:12px;background:var(--accent);color:var(--accent-ink);font-family:var(--f-mono);font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+/* boarding-pass perforation between photo and body */
+.card-body{position:relative;padding:20px 20px 18px;display:flex;flex-direction:column;gap:8px;flex:1;border-top:2px dashed var(--line)}
+.card-body::before,.card-body::after{content:"";position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg)}
+.card-body::before{left:-10px}.card-body::after{right:-10px}
+.card .code{color:var(--muted)}
+.card h4{font-family:var(--f-display);font-size:1.75rem;font-weight:800;text-transform:uppercase;line-height:1;margin:0}
+.card p{color:var(--muted);font-size:.95rem}
+.card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px}
+.price{font-family:var(--f-mono);font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.add{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.9rem;border-radius:999px;padding:9px 14px 9px 12px}
+.add svg{width:18px;height:18px}
+.add:hover{filter:brightness(1.06)}
+.add.added{background:var(--ok);color:#fff}
+.split{display:grid;grid-template-columns:calc(var(--n) * 300px + (var(--n) - 1) * 20px) 1fr;gap:40px;align-items:start}
+.split .cards{grid-template-columns:repeat(var(--n),1fr);margin:0}
+.split .list{grid-template-columns:1fr}
+.split .row:first-child{padding-top:0}
+@media (max-width:760px){.split{grid-template-columns:1fr;gap:12px}.split .cards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));column-gap:40px}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:6px 16px;align-items:center;padding:14px 0;border-bottom:1px dashed var(--line)}
+.row-name{display:flex;align-items:baseline;gap:10px;min-width:0}
+.row-name strong{font-weight:700;font-size:1.05rem}
+.row-name .mono{color:var(--muted);font-size:.68rem}
+.row p{grid-column:1/2;color:var(--muted);font-size:.9rem}
+.row .price{grid-row:1;grid-column:2;font-size:1rem}
+.row .add-sm{grid-row:1/3;grid-column:3;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.row .add-sm:hover{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.row .add-sm.added{background:var(--ok);border-color:var(--ok);color:#fff}
+.row .add-sm svg{width:18px;height:18px}
+
+/* combo */
+.combo{background:var(--accent);color:var(--accent-ink);border-radius:24px;display:grid;grid-template-columns:1.1fr 1fr;overflow:hidden;align-items:stretch}
+.combo-copy{padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px;min-width:0}
+.combo .mono{opacity:.75}
+.combo h2{font-size:clamp(2.8rem,6vw,4.6rem);font-weight:900;text-transform:uppercase}
+.combo ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.combo li{background:rgba(27,18,5,.1);padding:6px 12px;border-radius:999px;font-weight:600;font-size:.92rem}
+.combo-price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.combo-price b{font-family:var(--f-display);font-size:3.4rem;font-weight:900;line-height:1}
+.combo-price s{font-family:var(--f-mono);opacity:.6}
+.combo .btn{background:var(--accent-ink);color:var(--accent);align-self:flex-start}
+.combo-img{min-height:260px;background:#000}
+.combo-img img{width:100%;height:100%;object-fit:cover}
+.about-photos img{height:auto}
+@media (max-width:760px){.combo{grid-template-columns:1fr}.combo-img{order:-1;min-height:200px;max-height:240px}}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.about-photos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.about-photos img{border-radius:var(--r);aspect-ratio:3/4;object-fit:cover;width:100%}
+.about-photos img:nth-child(2){margin-top:40px}
+.about-copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.about-copy h2{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;text-transform:uppercase}
+.about-copy p{color:var(--muted);font-size:1.05rem;max-width:34em}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.fact{border-top:2px solid var(--ink);padding-top:10px}
+.fact b{font-family:var(--f-display);font-size:1.4rem;text-transform:uppercase;display:block;line-height:1.05}
+.fact span{color:var(--muted);font-size:.85rem}
+@media (max-width:800px){.about{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr 1fr}}
+@media (max-width:440px){.facts{grid-template-columns:1fr}}
+
+/* reviews */
+.rev{background:var(--night);color:var(--night-ink)}
+.rev .sec-head p{color:var(--night-muted)}
+.rev .eyebrow{color:var(--accent)}
+.rev-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(28px,5vw,64px);align-items:center}
+.steps{display:flex;flex-direction:column;gap:18px;margin-bottom:28px}
+.step{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start}
+.step-n{width:48px;height:48px;border-radius:12px;background:var(--night-2);border:1px solid rgba(255,255,255,.1);display:grid;place-items:center;color:var(--accent)}
+.step-n svg{width:24px;height:24px}
+.step b{display:block;font-size:1.05rem}
+.step span{color:var(--night-muted);font-size:.95rem}
+.rev-note{font-size:.85rem;color:var(--night-muted);margin-top:18px;max-width:36em}
+/* table tent card mockup */
+.tent-wrap{display:grid;place-items:center;padding:12px}
+.tent{width:min(100%,400px);background:#F4F1EA;color:#121821;border-radius:18px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.5);transform:rotate(2deg)}
+.tent-top{background:#121821;color:#F2EFE8;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:6px 16px;flex-wrap:wrap}
+.tent-top .logo-word{font-size:1.3rem}
+.tent-top .mono{font-size:.65rem;color:#9AA5B2}
+.tent-body{display:grid;grid-template-columns:1fr auto;gap:16px;padding:20px;align-items:center;border-bottom:2px dashed #cfc8ba;position:relative}
+.tent-body h3{font-size:2.1rem;font-weight:900;text-transform:uppercase;color:#121821}
+.tent-body p{font-size:.85rem;color:#4a4f57;margin-top:6px}
+.tent-stars{display:flex;gap:3px;color:#F0A83A;margin-top:10px}
+.tent-stars svg{width:20px;height:20px}
+.qr{background:#fff;padding:8px;border-radius:10px;width:128px;height:128px;display:grid;place-items:center}
+.qr img,.qr canvas{width:112px!important;height:112px!important}
+.tent-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;gap:12px}
+.nfc{display:flex;align-items:center;gap:10px;font-weight:600;font-size:.88rem}
+.nfc svg{width:30px;height:30px;color:#2C6B9E}
+.tent-foot .mono{font-size:.62rem;color:#6b6f76;text-align:right}
+@media (max-width:860px){.rev-grid{grid-template-columns:1fr}}
+@media (max-width:400px){.tent-body{grid-template-columns:1fr}.qr{justify-self:start}}
+
+/* visit */
+.visit{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+.map-card{border-radius:var(--r);overflow:hidden;position:relative;min-height:320px;background:var(--surface-2);display:flex;align-items:flex-end;box-shadow:var(--shadow)}
+.map-card svg.map{position:absolute;inset:0;width:100%;height:100%}
+.map-info{position:relative;margin:16px;background:var(--surface);border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;width:calc(100% - 32px);box-shadow:var(--shadow)}
+.map-info b{display:block;font-size:1.05rem}
+.map-info span{color:var(--muted);font-size:.9rem}
+.hours{background:var(--surface);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.hours h3{font-size:2rem;font-weight:900;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.open-pill{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted);text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
+.open-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.open-pill.is-open{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.hours-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}
+.hours-row.today{font-weight:700}
+.hours-row.today span:first-child::after{content:" · hoy";color:var(--accent-text);font-weight:600}
+.hours-row span:last-child{font-family:var(--f-mono);font-size:.92rem}
+.contact{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.contact a{display:flex;align-items:center;gap:12px;text-decoration:none;padding:10px 12px;border-radius:10px;background:var(--surface-2);font-weight:600}
+.contact a:hover{background:var(--line)}
+.contact svg{width:22px;height:22px;flex:none}
+@media (max-width:800px){.visit{grid-template-columns:1fr}}
+
+/* footer */
+footer{background:var(--night);color:var(--night-muted);padding-block:40px 110px;font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+footer .logo{color:var(--night-ink)}
+.socials{display:flex;gap:10px}
+.socials a{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);color:var(--night-ink)}
+.socials a:hover{background:var(--accent);color:var(--accent-ink)}
+.socials svg{width:20px;height:20px}
+
+/* cart */
+.cart-fab{position:fixed;right:max(16px,calc(env(safe-area-inset-right,0px) + 16px));bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:70;display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:10px 12px 10px 20px;box-shadow:0 10px 30px rgba(0,0,0,.3);font-weight:700;transform:translateY(0);transition:transform .25s ease,opacity .25s ease}
+.cart-fab.empty{transform:translateY(140%);opacity:0;pointer-events:none}
+.cart-fab .count{background:var(--accent);color:var(--accent-ink);border-radius:999px;min-width:30px;height:30px;display:grid;place-items:center;font-family:var(--f-mono);padding:0 8px}
+.cart-fab .total{font-family:var(--f-mono)}
+.bump{animation:bump .35s ease}
+@keyframes bump{40%{transform:scale(1.08)}}
+.scrim{position:fixed;inset:0;background:rgba(5,8,12,.55);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;z-index:90;right:0;top:0;bottom:0;width:min(420px,100%);background:var(--surface);color:var(--ink);transform:translateX(105%);transition:transform .28s ease;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.drawer.on{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:2px dashed var(--line)}
+.drawer-head h3{font-size:2rem;font-weight:900;text-transform:uppercase}
+.x{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);display:grid;place-items:center}
+.x svg{width:20px;height:20px}
+.drawer-items{flex:1;overflow-y:auto;padding:8px 20px}
+.ci{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 0;border-bottom:1px dashed var(--line);align-items:center}
+.ci b{font-weight:700}
+.ci .price{font-size:.95rem}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);font-weight:700;line-height:1}
+.qty span{font-family:var(--f-mono);min-width:22px;text-align:center}
+.drawer-foot{padding:20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.sum{display:flex;justify-content:space-between;align-items:baseline}
+.sum b{font-family:var(--f-mono);font-size:1.4rem}
+.drawer-foot label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.drawer-foot input{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.drawer-foot small{color:var(--muted);font-size:.8rem}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<!-- SVG sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 24 24"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.1-1.2l-.4-.3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M7 2.5h10A4.5 4.5 0 0 1 21.5 7v10a4.5 4.5 0 0 1-4.5 4.5H7A4.5 4.5 0 0 1 2.5 17V7A4.5 4.5 0 0 1 7 2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-2.2v.01"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-nfc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8.5 8.5a5 5 0 0 1 0 7M12 6a8.5 8.5 0 0 1 0 12M15.5 3.5a12 12 0 0 1 0 17M5 11v2"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 4h16v12H8l-4 4z"/></symbol>
+  <symbol id="i-google" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3zM12 22c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 1-3.4 1a6 6 0 0 1-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22zM6.4 13.9a6 6 0 0 1 0-3.8V7.5H3.1a10 10 0 0 0 0 9zM12 6c1.5 0 2.8.5 3.9 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6A6 6 0 0 1 12 6z"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Aerosandwich, inicio">
+      <span class="logo-mark"><svg><use href="#i-plane"/></svg></span>
+      <span class="logo-word">Aero<span>sandwich</span></span>
+    </a>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#carta">Carta</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#califica">Califícanos</a>
+      <a href="#visitanos">Visítanos</a>
+    </nav>
+    <a class="btn btn-wa js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><span class="lbl">Pedir por WhatsApp</span></a>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Sandwichería &amp; cafetería</span>
+        <h1>Sabor que <em>despega.</em></h1>
+        <p class="hero-sub">Churrascos, chacareros y completos hechos al momento, con pan del día y palta de verdad. Y un café para acompañar.</p>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="#carta">Ver la carta</a>
+          <a class="btn btn-ghost js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Pedir por WhatsApp</a>
+        </div>
+        <a class="rating-chip js-review" href="#" target="_blank" rel="noopener">
+          <span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+          <span><b>¿Nos das nuestra primera estrella?</b><small>Califícanos en Google, toma 30 segundos</small></span>
+        </a>
+      </div>
+      <div class="hero-media">
+        <img src="img/burger.webp" alt="Hamburguesa doble con cheddar, tocino, tomate y lechuga" width="1536" height="1024" fetchpriority="high">
+        <div class="tag" aria-hidden="true">
+          <div><span class="mono">AS 310 · Más pedido</span><strong>Doble Bacon</strong></div>
+          <span class="price">$7.490</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="board-band" aria-label="Lo más pedido hoy">
+    <div class="wrap">
+      <div class="board">
+        <div class="board-head">
+          <div class="board-title"><svg><use href="#i-plane"/></svg>Salidas de hoy</div>
+          <div class="clock">Hora local <b id="clock">--:--</b></div>
+        </div>
+        <div class="board-scroll">
+          <table>
+            <thead><tr><th>Vuelo</th><th>Destino</th><th>Puerta</th><th>Precio</th><th>Estado</th></tr></thead>
+            <tbody id="board"></tbody>
+          </table>
+        </div>
+        <div class="board-foot"><span>Toca un destino para verlo en la carta</span><span>Tripulación: la cocina de Aerosandwich</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="carta">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Carta de vuelo</span>
+        <h2>Nuestra carta</h2>
+        <p>Arma tu pedido aquí y envíalo directo a nuestro WhatsApp. Lo tenemos listo cuando llegues.</p>
+      </div>
+    </div>
+    <div class="chips"><div class="wrap chips-row" id="chips"></div></div>
+    <div class="wrap" id="menu"></div>
+
+    <div class="wrap">
+      <div class="combo">
+        <div class="combo-copy">
+          <span class="mono">AS 777 · Promo de la semana</span>
+          <h2>Combo Despegue</h2>
+          <ul><li>Churrasco o chacarero</li><li>Papas fritas</li><li>Bebida en lata</li></ul>
+          <div class="combo-price"><b>$8.990</b><s>$11.470</s></div>
+          <button class="btn" type="button" data-add="combo">Agregar combo al pedido</button>
+        </div>
+        <div class="combo-img"><img src="img/papas.jpg" alt="Canasto de papas fritas doradas" loading="lazy" width="622" height="350"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="nosotros" style="padding-top:0">
+    <div class="wrap about">
+      <div class="about-photos">
+        <img src="img/chacarero.jpg" alt="Chacarero con porotos verdes, tomate y ají" loading="lazy">
+        <img src="img/churrasco.webp" alt="Churrasco italiano con tomate, palta y mayonesa" loading="lazy">
+      </div>
+      <div class="about-copy">
+        <span class="eyebrow">Nuestra historia</span>
+        <h2>Años alimentando al barrio</h2>
+        <p>Aerosandwich nació con una idea simple: el sándwich chileno bien hecho, generoso y a buen precio. Muchos de nuestros clientes vienen desde el primer día y ya piden “lo de siempre”.</p>
+        <p>Cortamos la carne a la plancha, molemos la palta cada mañana y el pan llega del día. Así de simple, así de rico.</p>
+        <div class="facts">
+          <div class="fact"><b>Al momento</b><span>Nada se prepara antes de tu pedido</span></div>
+          <div class="fact"><b>Pan del día</b><span>Frica, marraqueta y ciabatta</span></div>
+          <div class="fact"><b>Palta real</b><span>Molida cada mañana</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec rev" id="califica">
+    <div class="wrap rev-grid">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Califica tu vuelo</span>
+          <h2>¿Te gustó? Cuéntalo en Google</h2>
+          <p>Tu opinión ayuda a que más vecinos nos encuentren. En cada mesa tienes una tarjeta para hacerlo en segundos.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="step-n"><svg><use href="#i-nfc"/></svg></span><div><b>Acerca tu celular a la tarjeta</b><span>Funciona con NFC en la mayoría de los teléfonos. No necesitas ninguna app.</span></div></div>
+          <div class="step"><span class="step-n"><svg><use href="#i-qr"/></svg></span><div><b>O escanea el código QR</b><span>Con la cámara del celular, igual que siempre.</span></div></div>
+          <div class="step"><span class="step-n"><svg><use href="#i-star"/></svg></span><div><b>Elige tus estrellas y listo</b><span>Se abre directo nuestra ficha de Google Maps para calificar.</span></div></div>
+        </div>
+        <a class="btn btn-accent js-review" href="#" target="_blank" rel="noopener"><svg><use href="#i-google"/></svg>Calificar en Google</a>
+      </div>
+      <div class="tent-wrap">
+        <div class="tent" aria-label="Diseño de tarjeta de mesa con QR y NFC">
+          <div class="tent-top"><span class="logo-word">Aero<span>sandwich</span></span><span class="mono">Mesa 04 · Asiento 1A</span></div>
+          <div class="tent-body">
+            <div>
+              <span class="mono" style="color:#6b6f76">Tarjeta de embarque</span>
+              <h3>¿Qué tal tu vuelo?</h3>
+              <p>Califícanos en Google, nos ayuda muchísimo.</p>
+              <div class="tent-stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+            </div>
+            <div class="qr" id="qr" role="img" aria-label="Código QR para calificar en Google"></div>
+          </div>
+          <div class="tent-foot">
+            <span class="nfc"><svg><use href="#i-nfc"/></svg>Acerca tu celular aquí</span>
+            <span class="mono">Gracias por<br>volar con nosotros</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="visitanos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Puerta de embarque</span>
+        <h2>Visítanos</h2>
+      </div>
+      <div class="visit">
+        <div class="map-card">
+          <svg class="map" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="600" height="400" fill="var(--surface-2)"/>
+            <g stroke="var(--line)" stroke-width="14" fill="none" stroke-linecap="round">
+              <path d="M-20 120 L620 90"/><path d="M-20 290 L620 320"/><path d="M140 -20 L180 420"/><path d="M420 -20 L390 420"/>
+            </g>
+            <g stroke="var(--line)" stroke-width="5" fill="none"><path d="M-20 200 L620 205"/><path d="M280 -20 L285 420"/><path d="M520 -20 L560 420"/><path d="M40 -20 L60 420"/></g>
+            <rect x="200" y="130" width="60" height="55" rx="6" fill="var(--bg)"/><rect x="300" y="220" width="70" height="60" rx="6" fill="var(--bg)"/><rect x="440" y="120" width="60" height="60" rx="6" fill="var(--bg)"/>
+            <circle cx="330" cy="160" r="34" fill="var(--accent)" opacity=".18"/>
+            <g transform="translate(312 112)"><path d="M18 0a18 18 0 0 0-18 18c0 13.5 18 32 18 32s18-18.5 18-32A18 18 0 0 0 18 0z" fill="var(--accent)"/><circle cx="18" cy="18" r="7" fill="var(--accent-ink)"/></g>
+          </svg>
+          <div class="map-info">
+            <div><b id="addr">Av. Ejemplo 1234</b><span id="comuna">Santiago, Chile</span></div>
+            <a class="btn btn-ink js-maps" href="#" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Cómo llegar</a>
+          </div>
+        </div>
+        <div class="hours">
+          <h3>Horario <span class="open-pill" id="openPill">Cerrado</span></h3>
+          <div id="hours"></div>
+          <div class="contact">
+            <a class="js-wa" href="#" target="_blank" rel="noopener"><svg style="color:#25D366"><use href="#i-wa"/></svg><span id="waText">+56 9 0000 0000</span></a>
+            <a class="js-ig" href="#" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg><span id="igText">@aerosandwich</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#inicio"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
+    <span>Sándwiches, completos y café. Hecho al momento.</span>
+    <div class="socials">
+      <a class="js-ig" href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
+      <a class="js-wa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#i-wa"/></svg></a>
+      <a class="js-maps" href="#" target="_blank" rel="noopener" aria-label="Google Maps"><svg><use href="#i-pin"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<button class="cart-fab empty" id="cartFab" type="button" aria-label="Ver mi pedido">
+  Mi pedido <span class="total" id="fabTotal">$0</span><span class="count" id="fabCount">0</span>
+</button>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Tu pedido" aria-hidden="true">
+  <div class="drawer-head"><h3>Tu pedido</h3><button class="x" id="closeCart" type="button" aria-label="Cerrar"><svg><use href="#i-x"/></svg></button></div>
+  <div class="drawer-items" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="sum"><span>Total</span><b id="cartTotal">$0</b></div>
+    <label for="cartName">Tu nombre (para tener listo el pedido)<input id="cartName" type="text" autocomplete="given-name" placeholder="Ej: Camila"></label>
+    <a class="btn btn-wa" id="sendWa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Enviar pedido por WhatsApp</a>
+    <small>Se abre WhatsApp con tu pedido ya escrito. Confirmamos por ahí.</small>
+  </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ====== DATOS DEL LOCAL: cambia aquí ====== */
+const CONFIG = {
+  nombre: "Aerosandwich",
+  whatsapp: "56900000000",              // número sin + ni espacios
+  whatsappTexto: "+56 9 0000 0000",
+  instagram: "aerosandwich",
+  direccion: "Av. Ejemplo 1234",
+  comuna: "Santiago, Chile",
+  // Enlace de reseña de Google (Perfil de Empresa > Pedir reseñas). Ej: https://g.page/r/XXXX/review
+  resenaGoogle: "https://www.google.com/maps/search/?api=1&query=Aerosandwich",
+  mapa: "https://www.google.com/maps/search/?api=1&query=Aerosandwich",
+  // 0 = domingo ... 6 = sábado ; null = cerrado
+  horario: [null, ["08:00","20:00"], ["08:00","20:00"], ["08:00","20:00"], ["08:00","20:00"], ["08:00","21:00"], ["09:00","16:00"]]
+};
+
+const MENU = [
+  {cat:"Sándwiches", items:[
+    {id:"churrasco", code:"AS 101", name:"Churrasco Italiano", desc:"Carne a la plancha, tomate, palta y mayo casera en pan frica.", price:6490, img:"img/churrasco.webp", badge:"Clásico"},
+    {id:"chacarero", code:"AS 102", name:"Chacarero", desc:"Carne, porotos verdes, tomate y ají verde. El de siempre.", price:6990, img:"img/chacarero.jpg", badge:"Chileno"},
+    {id:"ciabatta", code:"AS 103", name:"Ciabatta Serrano", desc:"Jamón serrano, mozzarella fundida, rúcula y tomate deshidratado.", price:6990, img:"img/ciabatta.jpg", badge:"Nuevo"},
+    {id:"barrosluco", code:"AS 104", name:"Barros Luco", desc:"Carne y queso derretido en pan frica.", price:5990},
+    {id:"barrosjarpa", code:"AS 105", name:"Barros Jarpa", desc:"Jamón y queso derretido en marraqueta.", price:3990},
+    {id:"avepalta", code:"AS 106", name:"Ave Palta", desc:"Pollo desmenuzado, palta y mayo casera.", price:4990},
+    {id:"lomito", code:"AS 107", name:"Lomito Italiano", desc:"Lomo de cerdo, tomate, palta y mayo.", price:6290}
+  ]},
+  {cat:"Hamburguesas", items:[
+    {id:"doblebacon", code:"AS 310", name:"Doble Bacon", desc:"Dos carnes, cheddar fundido, tocino crocante, cebolla morada, tomate y lechuga.", price:7490, img:"img/burger.webp", badge:"Más pedido"},
+    {id:"clasica", code:"AS 311", name:"Hamburguesa Clásica", desc:"Carne, queso, tomate, lechuga y salsa de la casa.", price:5490}
+  ]},
+  {cat:"Completos", items:[
+    {id:"completo", code:"AS 205", name:"Completo Italiano", desc:"Vienesa, palta molida, tomate y mayo casera.", price:2990, img:"img/completo.webp"},
+    {id:"dinamico", code:"AS 206", name:"Dinámico", desc:"Palta, tomate, americana, chucrut y mayo.", price:3290},
+    {id:"as", code:"AS 207", name:"As Italiano", desc:"Carne picada a la plancha con palta, tomate y mayo.", price:4490}
+  ]},
+  {cat:"Para acompañar", items:[
+    {id:"papas", code:"AS 401", name:"Papas Fritas", desc:"Porción individual, crujientes y doradas.", price:2990, img:"img/papas.jpg"},
+    {id:"papasxl", code:"AS 402", name:"Papas para compartir", desc:"Porción grande con salsas a elección.", price:4490}
+  ]},
+  {cat:"Cafetería", items:[
+    {id:"espresso", code:"AS 501", name:"Espresso", desc:"Simple o doble.", price:1800},
+    {id:"americano", code:"AS 502", name:"Americano", desc:"Espresso alargado con agua caliente.", price:2000},
+    {id:"cortado", code:"AS 503", name:"Cortado", desc:"Espresso con un toque de leche.", price:2200},
+    {id:"cappuccino", code:"AS 504", name:"Cappuccino", desc:"Espresso, leche vaporizada y espuma.", price:2800},
+    {id:"latte", code:"AS 505", name:"Latte", desc:"Más leche, más suave.", price:2900},
+    {id:"mokaccino", code:"AS 506", name:"Mokaccino", desc:"Café, chocolate y leche.", price:3200},
+    {id:"te", code:"AS 507", name:"Té o infusión", desc:"Variedades a elección.", price:1500}
+  ]},
+  {cat:"Bebestibles", items:[
+    {id:"lata", code:"AS 601", name:"Bebida en lata", desc:"350 ml, sabores a elección.", price:1500},
+    {id:"jugo", code:"AS 602", name:"Jugo natural", desc:"Frutilla, piña o mango. 500 ml.", price:2800},
+    {id:"agua", code:"AS 603", name:"Agua mineral", desc:"Con o sin gas.", price:1200}
+  ]}
+];
+const COMBO = {id:"combo", name:"Combo Despegue", price:8990};
+
+const BOARD = [
+  {id:"churrasco", status:"Embarcando", cls:""},
+  {id:"chacarero", status:"A tiempo", cls:"ok"},
+  {id:"doblebacon", status:"Últ. llamada", cls:"last"},
+  {id:"completo", status:"A tiempo", cls:"ok"},
+  {id:"cappuccino", status:"Embarcando", cls:""}
+];
+
+/* ====== helpers ====== */
+const $ = s => document.querySelector(s);
+const clp = n => "$" + n.toLocaleString("es-CL");
+const ITEMS = Object.fromEntries(MENU.flatMap(c => c.items.map(i => [i.id, i])).concat([[COMBO.id, COMBO]]));
+const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/\s+/g,"-");
+const icon = id => `<svg><use href="#${id}"/></svg>`;
+const waLink = text => `https://wa.me/${CONFIG.whatsapp}${text ? "?text=" + encodeURIComponent(text) : ""}`;
+
+/* links */
+document.querySelectorAll(".js-wa").forEach(a => a.href = waLink(`Hola ${CONFIG.nombre}! Quiero hacer un pedido.`));
+document.querySelectorAll(".js-ig").forEach(a => a.href = `https://instagram.com/${CONFIG.instagram}`);
+document.querySelectorAll(".js-maps").forEach(a => a.href = CONFIG.mapa);
+document.querySelectorAll(".js-review").forEach(a => a.href = CONFIG.resenaGoogle);
+$("#addr").textContent = CONFIG.direccion; $("#comuna").textContent = CONFIG.comuna;
+$("#waText").textContent = CONFIG.whatsappTexto; $("#igText").textContent = "@" + CONFIG.instagram;
+
+/* ====== menu ====== */
+$("#chips").innerHTML = MENU.map((c,i) => `<a class="chip${i===0?" on":""}" href="#cat-${slug(c.cat)}">${c.cat}</a>`).join("");
+$("#menu").innerHTML = MENU.map(c => {
+  const withImg = c.items.filter(i => i.img), rest = c.items.filter(i => !i.img);
+  return `<div class="cat" id="cat-${slug(c.cat)}">
+    <div class="cat-head"><h3>${c.cat}</h3><span class="mono">${c.items.length} opciones</span></div>
+    <div class="${withImg.length && withImg.length < 3 ? "split" : ""}" style="--n:${withImg.length}">
+    ${withImg.length ? `<div class="cards">${withImg.map(i => `
+      <article class="card" id="item-${i.id}">
+        <div class="card-img"><img src="${i.img}" alt="${i.name}" loading="lazy">${i.badge?`<span class="badge">${i.badge}</span>`:""}</div>
+        <div class="card-body">
+          <span class="mono code">${i.code}</span>
+          <h4>${i.name}</h4>
+          <p>${i.desc}</p>
+          <div class="card-foot"><span class="price">${clp(i.price)}</span><button class="add" type="button" data-add="${i.id}">${icon("i-plus")}Agregar</button></div>
+        </div>
+      </article>`).join("")}</div>` : ""}
+    ${rest.length ? `<div class="list">${rest.map(i => `
+      <div class="row" id="item-${i.id}">
+        <div class="row-name"><strong>${i.name}</strong><span class="mono">${i.code}</span></div>
+        <span class="price">${clp(i.price)}</span>
+        <button class="add-sm" type="button" data-add="${i.id}" aria-label="Agregar ${i.name}">${icon("i-plus")}</button>
+        <p>${i.desc}</p>
+      </div>`).join("")}</div>` : ""}
+    </div>
+  </div>`;
+}).join("");
+
+/* active chip on scroll */
+const chips = [...document.querySelectorAll(".chip")];
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) {
+    chips.forEach(c => c.classList.toggle("on", c.getAttribute("href") === "#" + e.target.id));
+    const on = chips.find(c => c.classList.contains("on")); on && on.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
+  }
+}), {rootMargin:"-45% 0px -50% 0px"});
+document.querySelectorAll(".cat").forEach(c => io.observe(c));
+
+/* ====== departures board ====== */
+const PAD = 18;
+const flaps = (txt, len) => `<span class="flaps">${txt.toUpperCase().padEnd(len," ").slice(0,len).split("").map(ch => `<span class="flap${ch===" "?" sp":""}">${ch===" "?"&nbsp;":ch}</span>`).join("")}</span>`;
+$("#board").innerHTML = BOARD.map((b,i) => {
+  const it = ITEMS[b.id];
+  return `<tr><td>${it.code}</td><td class="dest"><a href="#item-${it.id}">${flaps(it.name, PAD)}</a></td><td>0${i+1}</td><td>${clp(it.price)}</td><td class="st ${b.cls}" data-row="${i}">${flaps(b.status, 12)}</td></tr>`;
+}).join("");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZÚ. ";
+function flipTo(cell, text){
+  const target = text.toUpperCase().padEnd(12," ").slice(0,12).split("");
+  const spans = cell.querySelectorAll(".flap");
+  spans.forEach((sp, k) => {
+    let n = reduce ? 0 : 3 + Math.floor(Math.random()*5);
+    const tick = () => {
+      const ch = n-- > 0 ? CHARS[Math.floor(Math.random()*CHARS.length)] : target[k];
+      sp.innerHTML = ch === " " ? "&nbsp;" : ch;
+      sp.classList.toggle("sp", n < 0 && ch === " ");
+      sp.classList.remove("flip"); void sp.offsetWidth; sp.classList.add("flip");
+      if (n >= 0) setTimeout(tick, 70);
+    };
+    tick();
+  });
+}
+const STATES = [["Embarcando",""],["A tiempo","ok"],["Últ. llamada","last"],["Preparando",""]];
+if (!reduce) setInterval(() => {
+  const cells = document.querySelectorAll(".st");
+  const cell = cells[Math.floor(Math.random()*cells.length)];
+  const [txt, cls] = STATES[Math.floor(Math.random()*STATES.length)];
+  cell.className = "st " + cls; flipTo(cell, txt);
+}, 3200);
+const clock = () => { $("#clock").textContent = new Date().toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit",hour12:false}); };
+clock(); setInterval(clock, 15000);
+
+/* ====== hours + open now ====== */
+const DAYS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const now = new Date(), today = now.getDay();
+$("#hours").innerHTML = [1,2,3,4,5,6,0].map(d => {
+  const h = CONFIG.horario[d];
+  return `<div class="hours-row${d===today?" today":""}"><span>${DAYS[d]}</span><span>${h ? h[0]+" – "+h[1] : "Cerrado"}</span></div>`;
+}).join("");
+(() => {
+  const h = CONFIG.horario[today]; if (!h) return;
+  const mins = now.getHours()*60 + now.getMinutes(), toM = t => +t.slice(0,2)*60 + +t.slice(3);
+  if (mins >= toM(h[0]) && mins < toM(h[1])) { const p = $("#openPill"); p.textContent = "Abierto ahora"; p.classList.add("is-open"); }
+  else $("#openPill").textContent = "Cerrado ahora";
+})();
+
+/* ====== QR ====== */
+try { new QRCode($("#qr"), {text: CONFIG.resenaGoogle, width:224, height:224, colorDark:"#121821", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.M}); } catch(e) {}
+
+/* ====== cart ====== */
+const cart = new Map();
+function addToCart(id, btn){
+  cart.set(id, (cart.get(id)||0) + 1); renderCart();
+  const fab = $("#cartFab"); fab.classList.remove("bump"); void fab.offsetWidth; fab.classList.add("bump");
+  if (btn) { btn.classList.add("added"); const old = btn.innerHTML; btn.innerHTML = btn.classList.contains("add") ? icon("i-check")+"Listo" : icon("i-check"); setTimeout(()=>{ btn.classList.remove("added"); btn.innerHTML = old; }, 1100); }
+}
+function renderCart(){
+  let total = 0, count = 0;
+  $("#cartItems").innerHTML = [...cart].map(([id,q]) => {
+    const it = ITEMS[id]; total += it.price*q; count += q;
+    return `<div class="ci"><b>${it.name}</b><span class="price">${clp(it.price*q)}</span>
+      <div class="qty"><button type="button" data-q="${id}" data-d="-1" aria-label="Quitar uno">−</button><span>${q}</span><button type="button" data-q="${id}" data-d="1" aria-label="Agregar uno">+</button></div></div>`;
+  }).join("") || `<p style="color:var(--muted);padding:24px 0">Aún no agregas nada. Elige algo de la carta.</p>`;
+  $("#cartTotal").textContent = clp(total); $("#fabTotal").textContent = clp(total); $("#fabCount").textContent = count;
+  $("#cartFab").classList.toggle("empty", count === 0);
+  updateWa(total);
+}
+function updateWa(total){
+  const name = $("#cartName").value.trim();
+  const lines = [...cart].map(([id,q]) => `• ${q} x ${ITEMS[id].name} (${clp(ITEMS[id].price*q)})`);
+  const msg = `Hola ${CONFIG.nombre}! ✈️ Quiero hacer este pedido:\n\n${lines.join("\n")}\n\nTotal: ${clp(total ?? [...cart].reduce((s,[id,q])=>s+ITEMS[id].price*q,0))}${name?`\nA nombre de: ${name}`:""}`;
+  $("#sendWa").href = waLink(msg);
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-add]"); if (a) addToCart(a.dataset.add, a);
+  const q = e.target.closest("[data-q]");
+  if (q) { const id = q.dataset.q, v = (cart.get(id)||0) + +q.dataset.d; v > 0 ? cart.set(id,v) : cart.delete(id); renderCart(); }
+});
+$("#cartName").addEventListener("input", () => updateWa());
+const drawer = $("#drawer"), scrim = $("#scrim");
+const openCart = on => { drawer.classList.toggle("on",on); scrim.classList.toggle("on",on); drawer.setAttribute("aria-hidden", !on); if(on) $("#closeCart").focus(); };
+$("#cartFab").addEventListener("click", () => openCart(true));
+$("#closeCart").addEventListener("click", () => openCart(false));
+scrim.addEventListener("click", () => openCart(false));
+document.addEventListener("keydown", e => { if (e.key === "Escape") openCart(false); });
+renderCart();
+</script>
