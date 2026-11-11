@@ -96,7 +96,7 @@ p{margin:0}
 @media (max-width:860px){.hero-grid{grid-template-columns:1fr;gap:28px}.hero-media{order:-1}}
 
 /* departures board */
-.board-band{background:var(--night);color:var(--night-ink);padding-bottom:clamp(40px,6vw,64px)}
+.board-wrap{padding-bottom:clamp(40px,6vw,64px)}
 .board{background:var(--night-2);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:18px clamp(12px,2vw,24px) 14px}
 .board-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .board-title{display:flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:800;font-size:1.6rem;text-transform:uppercase;letter-spacing:.04em;color:var(--flap-ink)}
@@ -104,7 +104,9 @@ p{margin:0}
 .clock{font-family:var(--f-mono);color:var(--night-muted);font-size:.85rem}
 .clock b{color:var(--flap-ink);font-size:1.1rem}
 .board-scroll{overflow-x:auto}
-.board table{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:620px}
+.board table{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:520px}
+.board th:last-child,.board td:last-child{text-align:right}
+@media (max-width:600px){.board table{min-width:0}.board th:last-child,.board td:last-child{display:none}.board td{font-size:.8rem}}
 .board th{font-family:var(--f-mono);font-weight:500;font-size:.7rem;letter-spacing:.14em;color:var(--night-muted);text-align:left;padding:0 8px;text-transform:uppercase}
 .board td{padding:0 8px;font-family:var(--f-mono);font-weight:700;font-size:.95rem;text-transform:uppercase;white-space:nowrap}
 .board td:first-child{color:var(--night-muted)}
@@ -232,7 +234,14 @@ p{margin:0}
 @media (max-width:400px){.tent-body{grid-template-columns:1fr}.qr{justify-self:start}}
 
 /* visit */
-.visit{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.where{gap:16px}
+.where h3{margin-bottom:0}
+.addr b{display:block;font-size:1.25rem}
+.addr span{color:var(--muted)}
+.where .btn{align-self:flex-start}
+.where .contact{margin-top:8px}
+.combo-copy p{font-size:1.05rem;max-width:28em}
 .map-card{border-radius:var(--r);overflow:hidden;position:relative;min-height:320px;background:var(--surface-2);display:flex;align-items:flex-end;box-shadow:var(--shadow)}
 .map-card svg.map{position:absolute;inset:0;width:100%;height:100%}
 .map-info{position:relative;margin:16px;background:var(--surface);border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;width:calc(100% - 32px);box-shadow:var(--shadow)}
@@ -333,40 +342,28 @@ footer .logo{color:var(--night-ink)}
       <div class="hero-copy">
         <span class="eyebrow">Sandwichería &amp; cafetería</span>
         <h1>Sabor que <em>despega.</em></h1>
-        <p class="hero-sub">Churrascos, chacareros, completos y chorrillanas hechos al momento, con pan del día y palta de verdad. Y un café para acompañar.</p>
+        <p class="hero-sub">Sándwiches chilenos, completos y café, hechos al momento.</p>
         <div class="hero-cta">
           <a class="btn btn-accent" href="#carta">Ver la carta</a>
           <a class="btn btn-ghost js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Pedir por WhatsApp</a>
         </div>
-        <a class="rating-chip js-review" href="#" target="_blank" rel="noopener">
-          <span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
-          <span><b>¿Nos das nuestra primera estrella?</b><small>Califícanos en Google, toma 30 segundos</small></span>
-        </a>
       </div>
       <div class="hero-media">
         <img src="img/burger.webp" alt="Hamburguesa doble con cheddar, tocino, tomate y lechuga" width="1536" height="1024" fetchpriority="high">
-        <div class="tag" aria-hidden="true">
-          <div><span class="mono">AS 310 · Más pedido</span><strong>Doble Bacon</strong></div>
-          <span class="price">$7.490</span>
-        </div>
       </div>
     </div>
-  </section>
-
-  <section class="board-band" aria-label="Lo más pedido hoy">
-    <div class="wrap">
-      <div class="board">
+    <div class="wrap board-wrap">
+      <div class="board" aria-label="Lo más pedido hoy">
         <div class="board-head">
           <div class="board-title"><svg><use href="#i-plane"/></svg>Salidas de hoy</div>
-          <div class="clock">Hora local <b id="clock">--:--</b></div>
+          <div class="clock"><b id="clock">--:--</b></div>
         </div>
         <div class="board-scroll">
           <table>
-            <thead><tr><th>Vuelo</th><th>Destino</th><th>Puerta</th><th>Precio</th><th>Estado</th></tr></thead>
+            <thead><tr><th>Vuelo</th><th>Destino</th><th>Estado</th></tr></thead>
             <tbody id="board"></tbody>
           </table>
         </div>
-        <div class="board-foot"><span>Toca un destino para verlo en la carta</span><span>Tripulación: la cocina de Aerosandwich</span></div>
       </div>
     </div>
   </section>
@@ -376,7 +373,7 @@ footer .logo{color:var(--night-ink)}
       <div class="sec-head">
         <span class="eyebrow">Carta de vuelo</span>
         <h2>Nuestra carta</h2>
-        <p>Arma tu pedido aquí y envíalo directo a nuestro WhatsApp. Lo tenemos listo cuando llegues.</p>
+        <p>Agrega lo que quieras y envía tu pedido por WhatsApp.</p>
       </div>
     </div>
     <div class="chips"><div class="wrap chips-row" id="chips"></div></div>
@@ -385,10 +382,10 @@ footer .logo{color:var(--night-ink)}
     <div class="wrap">
       <div class="combo">
         <div class="combo-copy">
-          <span class="mono">AS 777 · Promo de la semana</span>
+          <span class="mono">Promo de la semana</span>
           <h2>Combo Despegue</h2>
-          <ul><li>Churrasco o chacarero</li><li>Papas fritas</li><li>Bebida en lata</li></ul>
-          <div class="combo-price"><b>$8.990</b><s>$11.470</s></div>
+          <p>Churrasco o chacarero, papas fritas y bebida en lata.</p>
+          <div class="combo-price"><b>$8.990</b></div>
           <button class="btn" type="button" data-add="combo">Agregar combo al pedido</button>
         </div>
         <div class="combo-img"><img src="img/papas.jpg" alt="Canasto de papas fritas doradas" loading="lazy" width="622" height="350"></div>
@@ -405,13 +402,7 @@ footer .logo{color:var(--night-ink)}
       <div class="about-copy">
         <span class="eyebrow">Nuestra historia</span>
         <h2>Años alimentando al barrio</h2>
-        <p>Aerosandwich nació con una idea simple: el sándwich chileno bien hecho, generoso y a buen precio. Muchos de nuestros clientes vienen desde el primer día y ya piden “lo de siempre”.</p>
-        <p>Cortamos la carne a la plancha, molemos la palta cada mañana y el pan llega del día. Así de simple, así de rico.</p>
-        <div class="facts">
-          <div class="fact"><b>Al momento</b><span>Nada se prepara antes de tu pedido</span></div>
-          <div class="fact"><b>Pan del día</b><span>Frica, marraqueta y ciabatta</span></div>
-          <div class="fact"><b>Palta real</b><span>Molida cada mañana</span></div>
-        </div>
+        <p>El sándwich chileno bien hecho, generoso y a buen precio. Carne a la plancha, palta molida cada mañana y pan del día. Muchos clientes vienen desde el primer día y ya piden “lo de siempre”.</p>
       </div>
     </div>
   </section>
@@ -421,31 +412,29 @@ footer .logo{color:var(--night-ink)}
       <div>
         <div class="sec-head">
           <span class="eyebrow">Califica tu vuelo</span>
-          <h2>¿Te gustó? Cuéntalo en Google</h2>
-          <p>Tu opinión ayuda a que más vecinos nos encuentren. En cada mesa tienes una tarjeta para hacerlo en segundos.</p>
+          <h2>¿Te gustó? Califícanos</h2>
+          <p>Tu opinión en Google ayuda a que más vecinos nos encuentren.</p>
         </div>
         <div class="steps">
-          <div class="step"><span class="step-n"><svg><use href="#i-nfc"/></svg></span><div><b>Acerca tu celular a la tarjeta</b><span>Funciona con NFC en la mayoría de los teléfonos. No necesitas ninguna app.</span></div></div>
-          <div class="step"><span class="step-n"><svg><use href="#i-qr"/></svg></span><div><b>O escanea el código QR</b><span>Con la cámara del celular, igual que siempre.</span></div></div>
-          <div class="step"><span class="step-n"><svg><use href="#i-star"/></svg></span><div><b>Elige tus estrellas y listo</b><span>Se abre directo nuestra ficha de Google Maps para calificar.</span></div></div>
+          <div class="step"><span class="step-n"><svg><use href="#i-nfc"/></svg></span><div><b>Acerca tu celular a la tarjeta de tu mesa</b><span>O escanea el código QR con la cámara.</span></div></div>
+          <div class="step"><span class="step-n"><svg><use href="#i-star"/></svg></span><div><b>Elige tus estrellas</b><span>Se abre directo nuestra ficha en Google Maps.</span></div></div>
         </div>
         <a class="btn btn-accent js-review" href="#" target="_blank" rel="noopener"><svg><use href="#i-google"/></svg>Calificar en Google</a>
       </div>
       <div class="tent-wrap">
         <div class="tent" aria-label="Diseño de tarjeta de mesa con QR y NFC">
-          <div class="tent-top"><span class="logo-word">Aero<span>sandwich</span></span><span class="mono">Mesa 04 · Asiento 1A</span></div>
+          <div class="tent-top"><span class="logo-word">Aero<span>sandwich</span></span><span class="mono">Mesa 04</span></div>
           <div class="tent-body">
             <div>
               <span class="mono" style="color:#6b6f76">Tarjeta de embarque</span>
               <h3>¿Qué tal tu vuelo?</h3>
-              <p>Califícanos en Google, nos ayuda muchísimo.</p>
+              <p>Califícanos en Google.</p>
               <div class="tent-stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
             </div>
             <div class="qr" id="qr" role="img" aria-label="Código QR para calificar en Google"></div>
           </div>
           <div class="tent-foot">
             <span class="nfc"><svg><use href="#i-nfc"/></svg>Acerca tu celular aquí</span>
-            <span class="mono">Gracias por<br>volar con nosotros</span>
           </div>
         </div>
       </div>
@@ -459,29 +448,18 @@ footer .logo{color:var(--night-ink)}
         <h2>Visítanos</h2>
       </div>
       <div class="visit">
-        <div class="map-card">
-          <svg class="map" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <rect width="600" height="400" fill="var(--surface-2)"/>
-            <g stroke="var(--line)" stroke-width="14" fill="none" stroke-linecap="round">
-              <path d="M-20 120 L620 90"/><path d="M-20 290 L620 320"/><path d="M140 -20 L180 420"/><path d="M420 -20 L390 420"/>
-            </g>
-            <g stroke="var(--line)" stroke-width="5" fill="none"><path d="M-20 200 L620 205"/><path d="M280 -20 L285 420"/><path d="M520 -20 L560 420"/><path d="M40 -20 L60 420"/></g>
-            <rect x="200" y="130" width="60" height="55" rx="6" fill="var(--bg)"/><rect x="300" y="220" width="70" height="60" rx="6" fill="var(--bg)"/><rect x="440" y="120" width="60" height="60" rx="6" fill="var(--bg)"/>
-            <circle cx="330" cy="160" r="34" fill="var(--accent)" opacity=".18"/>
-            <g transform="translate(312 112)"><path d="M18 0a18 18 0 0 0-18 18c0 13.5 18 32 18 32s18-18.5 18-32A18 18 0 0 0 18 0z" fill="var(--accent)"/><circle cx="18" cy="18" r="7" fill="var(--accent-ink)"/></g>
-          </svg>
-          <div class="map-info">
-            <div><b id="addr">Av. Ejemplo 1234</b><span id="comuna">Santiago, Chile</span></div>
-            <a class="btn btn-ink js-maps" href="#" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Cómo llegar</a>
+        <div class="hours where">
+          <h3>Dirección</h3>
+          <p class="addr"><b id="addr">Av. Ejemplo 1234</b><span id="comuna">Santiago, Chile</span></p>
+          <a class="btn btn-ink js-maps" href="#" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Cómo llegar</a>
+          <div class="contact">
+            <a class="js-wa" href="#" target="_blank" rel="noopener"><svg style="color:#25D366"><use href="#i-wa"/></svg><span id="waText">+56 9 0000 0000</span></a>
+            <a class="js-ig" href="#" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg><span id="igText">@aerosandwich</span></a>
           </div>
         </div>
         <div class="hours">
           <h3>Horario <span class="open-pill" id="openPill">Cerrado</span></h3>
           <div id="hours"></div>
-          <div class="contact">
-            <a class="js-wa" href="#" target="_blank" rel="noopener"><svg style="color:#25D366"><use href="#i-wa"/></svg><span id="waText">+56 9 0000 0000</span></a>
-            <a class="js-ig" href="#" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg><span id="igText">@aerosandwich</span></a>
-          </div>
         </div>
       </div>
     </div>
@@ -491,7 +469,6 @@ footer .logo{color:var(--night-ink)}
 <footer>
   <div class="wrap">
     <a class="logo" href="#inicio"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
-    <span>Sándwiches, completos y café. Hecho al momento.</span>
     <div class="socials">
       <a class="js-ig" href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="js-wa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#i-wa"/></svg></a>
@@ -534,9 +511,9 @@ const CONFIG = {
 
 const MENU = [
   {cat:"Sándwiches", items:[
-    {id:"churrasco", code:"AS 101", name:"Churrasco Italiano", desc:"Carne a la plancha, tomate, palta y mayo casera en pan frica.", price:6490, img:"img/churrasco.webp", badge:"Clásico"},
-    {id:"chacarero", code:"AS 102", name:"Chacarero", desc:"Carne, porotos verdes, tomate y ají verde. El de siempre.", price:6990, img:"img/chacarero.jpg", badge:"Chileno"},
-    {id:"ciabatta", code:"AS 103", name:"Ciabatta Serrano", desc:"Jamón serrano, mozzarella fundida, rúcula y tomate deshidratado.", price:6990, img:"img/ciabatta.jpg", badge:"Nuevo"},
+    {id:"churrasco", code:"AS 101", name:"Churrasco Italiano", desc:"Carne a la plancha, tomate, palta y mayo casera en pan frica.", price:6490, img:"img/churrasco.webp"},
+    {id:"chacarero", code:"AS 102", name:"Chacarero", desc:"Carne, porotos verdes, tomate y ají verde. El de siempre.", price:6990, img:"img/chacarero.jpg"},
+    {id:"ciabatta", code:"AS 103", name:"Ciabatta Serrano", desc:"Jamón serrano, mozzarella fundida, rúcula y tomate deshidratado.", price:6990, img:"img/ciabatta.jpg"},
     {id:"barrosluco", code:"AS 104", name:"Barros Luco", desc:"Carne y queso derretido en pan frica.", price:5990},
     {id:"barrosjarpa", code:"AS 105", name:"Barros Jarpa", desc:"Jamón y queso derretido en marraqueta.", price:3990},
     {id:"avepalta", code:"AS 106", name:"Ave Palta", desc:"Pollo desmenuzado, palta y mayo casera.", price:4990},
@@ -552,7 +529,7 @@ const MENU = [
     {id:"as", code:"AS 207", name:"As Italiano", desc:"Carne picada a la plancha con palta, tomate y mayo.", price:4490}
   ]},
   {cat:"Para compartir", items:[
-    {id:"chorrillana", code:"AS 400", name:"Chorrillana", desc:"Papas fritas, carne salteada, longaniza, cebolla y dos huevos fritos. Para 2 personas.", price:12990, img:"img/chorrillana.webp", badge:"Para 2"},
+    {id:"chorrillana", code:"AS 400", name:"Chorrillana", desc:"Papas fritas, carne salteada, longaniza, cebolla y dos huevos fritos. Para 2 personas.", price:12990, img:"img/chorrillana.webp"},
     {id:"papas", code:"AS 401", name:"Papas Fritas", desc:"Porción individual, crujientes y doradas.", price:2990, img:"img/papas.jpg"},
     {id:"papasxl", code:"AS 402", name:"Papas para compartir", desc:"Porción grande con salsas a elección.", price:4490}
   ]},
@@ -602,13 +579,12 @@ $("#chips").innerHTML = MENU.map((c,i) => `<a class="chip${i===0?" on":""}" href
 $("#menu").innerHTML = MENU.map(c => {
   const withImg = c.items.filter(i => i.img), rest = c.items.filter(i => !i.img);
   return `<div class="cat" id="cat-${slug(c.cat)}">
-    <div class="cat-head"><h3>${c.cat}</h3><span class="mono">${c.items.length} opciones</span></div>
+    <div class="cat-head"><h3>${c.cat}</h3></div>
     <div class="${withImg.length && withImg.length < 3 ? "split" : ""}" style="--n:${withImg.length}">
     ${withImg.length ? `<div class="cards">${withImg.map(i => `
       <article class="card" id="item-${i.id}">
         <div class="card-img"><img src="${i.img}" alt="${i.name}" loading="lazy">${i.badge?`<span class="badge">${i.badge}</span>`:""}</div>
         <div class="card-body">
-          <span class="mono code">${i.code}</span>
           <h4>${i.name}</h4>
           <p>${i.desc}</p>
           <div class="card-foot"><span class="price">${clp(i.price)}</span><button class="add" type="button" data-add="${i.id}">${icon("i-plus")}Agregar</button></div>
@@ -616,7 +592,7 @@ $("#menu").innerHTML = MENU.map(c => {
       </article>`).join("")}</div>` : ""}
     ${rest.length ? `<div class="list">${rest.map(i => `
       <div class="row" id="item-${i.id}">
-        <div class="row-name"><strong>${i.name}</strong><span class="mono">${i.code}</span></div>
+        <div class="row-name"><strong>${i.name}</strong></div>
         <span class="price">${clp(i.price)}</span>
         <button class="add-sm" type="button" data-add="${i.id}" aria-label="Agregar ${i.name}">${icon("i-plus")}</button>
         <p>${i.desc}</p>
@@ -636,11 +612,12 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 document.querySelectorAll(".cat").forEach(c => io.observe(c));
 
 /* ====== departures board ====== */
-const PAD = 18;
+const PAD = 11;
+const SHORT = {churrasco:"Churrasco"};
 const flaps = (txt, len) => `<span class="flaps">${txt.toUpperCase().padEnd(len," ").slice(0,len).split("").map(ch => `<span class="flap${ch===" "?" sp":""}">${ch===" "?"&nbsp;":ch}</span>`).join("")}</span>`;
 $("#board").innerHTML = BOARD.map((b,i) => {
   const it = ITEMS[b.id];
-  return `<tr><td>${it.code}</td><td class="dest"><a href="#item-${it.id}">${flaps(it.name, PAD)}</a></td><td>0${i+1}</td><td>${clp(it.price)}</td><td class="st ${b.cls}" data-row="${i}">${flaps(b.status, 12)}</td></tr>`;
+  return `<tr><td>${it.code}</td><td class="dest"><a href="#item-${it.id}">${flaps(SHORT[it.id] || it.name, PAD)}</a></td><td class="st ${b.cls}" data-row="${i}">${flaps(b.status, 12)}</td></tr>`;
 }).join("");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZÚ. ";
