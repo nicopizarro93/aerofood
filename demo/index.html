@@ -622,10 +622,17 @@ $("#menu").innerHTML = MENU.map(c => {
 
 /* active chip on scroll */
 const chips = [...document.querySelectorAll(".chip")];
+const chipRow = document.getElementById("chips");
+let activeCat = "";
 const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) {
-    chips.forEach(c => c.classList.toggle("on", c.getAttribute("href") === "#" + e.target.id));
-    const on = chips.find(c => c.classList.contains("on")); on && on.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
+  if (!e.isIntersecting || e.target.id === activeCat) return;
+  activeCat = e.target.id;
+  chips.forEach(c => c.classList.toggle("on", c.getAttribute("href") === "#" + activeCat));
+  /* move only the chip bar sideways; never scroll the page itself */
+  const on = chips.find(c => c.classList.contains("on"));
+  if (on && chipRow.scrollWidth > chipRow.clientWidth) {
+    const dx = on.getBoundingClientRect().left - chipRow.getBoundingClientRect().left;
+    chipRow.scrollTo({left: chipRow.scrollLeft + dx - (chipRow.clientWidth - on.offsetWidth) / 2, behavior: "smooth"});
   }
 }), {rootMargin:"-45% 0px -50% 0px"});
 document.querySelectorAll(".cat").forEach(c => io.observe(c));
