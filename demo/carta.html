@@ -1,0 +1,332 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carta Aerosandwich</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Menú a bordo de Aerosandwich: sándwiches, completos, cafetería y dulces.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
+<style>
+/* Layout: "Menú a bordo". Two A4 sheets (front: food, back: café & sweets) that print as-is; under 900px the same sheets become a fluid single-column digital menu. */
+:root{
+  --desk:#E4E7EC; --desk-ink:#121821;
+  --paper:#FBF8F1; --ink:#13243A; --muted:#5E6673; --rule:#D9D1C1; --leader:#B9B0A0;
+  --navy:#0E2136; --gold:#C9A45C; --gold-hi:#F1DDA4; --accent:#B8741A; --sign:#F0A83A;
+  --night:#0C1015; --night-ink:#F2EFE8;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --f-serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+}
+/* the printed menu is paper in both themes; only the desk around it follows the theme */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--desk:#0D1117;--desk-ink:#EDF0F4;color-scheme:dark}}
+:root[data-theme="dark"]{--desk:#0D1117;--desk-ink:#EDF0F4;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--desk-ink);font-family:var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sign);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);text-transform:uppercase;line-height:.95;text-wrap:balance}
+p{margin:0}
+
+/* toolbar (screen only) */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--night);color:var(--night-ink)}
+.top .in{max-width:1140px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:var(--sign);display:grid;place-items:center;color:#1B1205}
+.logo-mark svg{width:20px;height:20px;transform:rotate(-35deg)}
+.logo-word{font-family:var(--f-display);font-weight:900;font-size:1.4rem;text-transform:uppercase;line-height:1}
+.logo-word span{color:var(--sign)}
+.top .actions{margin-left:auto;display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:0;font:inherit;font-weight:600;font-size:.9rem;text-decoration:none;cursor:pointer}
+.btn-accent{background:var(--sign);color:#1B1205}
+.btn-ghost{background:transparent;color:var(--night-ink);box-shadow:inset 0 0 0 1.5px rgba(242,239,232,.35)}
+@media (max-width:520px){.top .btn-ghost{display:none}}
+
+/* sheets */
+.desk{display:flex;flex-direction:column;align-items:center;gap:28px;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet{width:210mm;height:297mm;background:var(--paper);color:var(--ink);padding:12mm 13mm 10mm;display:flex;flex-direction:column;gap:5mm;box-shadow:0 2px 4px rgba(0,0,0,.08),0 18px 40px rgba(0,0,0,.18);position:relative;overflow:hidden;font-size:9.4pt;line-height:1.35;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet::before{content:"";position:absolute;inset:5mm;border:.3mm solid var(--gold);pointer-events:none;opacity:.7}
+
+.s-head{display:flex;justify-content:space-between;align-items:center;gap:6mm;border-bottom:.35mm solid var(--ink);padding-bottom:3mm}
+.brand{display:flex;align-items:center;gap:3mm}
+.brand .seal{width:13mm;height:13mm;color:var(--accent)}
+.brand b{font-family:var(--f-display);font-weight:900;font-size:22pt;letter-spacing:.04em;text-transform:uppercase;line-height:.9;display:block}
+.brand span{font-family:var(--f-serif);font-style:italic;font-size:11pt;color:var(--muted)}
+.flight{display:grid;grid-template-columns:repeat(3,auto);gap:1mm 6mm;text-align:left}
+.flight span{font-family:var(--f-mono);font-size:6.2pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block}
+.flight b{font-family:var(--f-mono);font-size:8.6pt;font-weight:700}
+
+.s-title{display:flex;align-items:flex-end;justify-content:space-between;gap:6mm}
+.s-title h1{font-size:40pt;font-weight:900;letter-spacing:.01em}
+.s-title h1 em{font-style:normal;color:var(--accent)}
+.s-title p{font-family:var(--f-serif);font-style:italic;font-size:13pt;color:var(--muted);max-width:70mm;text-align:right;line-height:1.15}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:9mm;flex:1;min-height:0}
+.col{display:flex;flex-direction:column;gap:5mm;min-width:0;justify-content:space-between}
+.cat-h{display:flex;align-items:center;gap:2.6mm;margin-bottom:1.6mm}
+.gate{width:7.5mm;height:7.5mm;background:var(--navy);color:var(--sign);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:13pt;border-radius:1mm;flex:none}
+.cat-h h2{font-size:19pt;font-weight:800;letter-spacing:.02em}
+.cat-h .note{margin-left:auto;font-family:var(--f-mono);font-size:6.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right}
+.items{display:flex;flex-direction:column;gap:3mm}
+.it{display:grid;grid-template-columns:auto 1fr auto;column-gap:2mm;align-items:baseline}
+.it .n{font-weight:700;font-size:10.8pt}
+.it .n i{font-style:normal;color:var(--accent);font-size:8pt;margin-left:1mm}
+.it .lead{border-bottom:.3mm dotted var(--leader);transform:translateY(-1mm)}
+.it .p{font-family:var(--f-mono);font-weight:700;font-size:10pt;font-variant-numeric:tabular-nums}
+.it .d{grid-column:1/-1;color:var(--muted);font-size:8.8pt;line-height:1.3}
+.it.two{grid-template-columns:auto 1fr 13mm 13mm}
+.it.two .p{text-align:right}
+.sizes{display:grid;grid-template-columns:1fr 13mm 13mm;column-gap:2mm;font-family:var(--f-mono);font-size:6.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:-.6mm}
+.sizes span{text-align:right}
+.extras{border:.3mm dashed var(--leader);border-radius:2mm;padding:2.6mm 3mm;display:flex;flex-direction:column;gap:1.2mm}
+.extras b{font-family:var(--f-mono);font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase}
+.extras p{font-size:9pt;color:var(--muted)}
+.photo{position:relative;border-radius:2mm;overflow:hidden;background:#ddd}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo figcaption{position:absolute;left:2mm;bottom:2mm;background:var(--paper);color:var(--ink);font-family:var(--f-mono);font-size:6.4pt;letter-spacing:.1em;text-transform:uppercase;padding:1mm 2mm;border-radius:1mm;font-weight:700}
+.photo-row{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+figure{margin:0}
+
+.s-foot{display:flex;justify-content:space-between;align-items:center;gap:6mm;border-top:.35mm solid var(--ink);padding-top:2.6mm;font-family:var(--f-mono);font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.s-foot b{color:var(--ink)}
+
+/* boarding pass strip (back page) */
+.pass{display:grid;grid-template-columns:1fr auto auto;border-radius:2.6mm;overflow:hidden;background:var(--navy);color:var(--night-ink)}
+.pass-info{padding:4mm 5mm;display:flex;flex-direction:column;gap:2mm;justify-content:center}
+.pass-info .k{font-family:var(--f-mono);font-size:6.2pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.pass-info h3{font-size:19pt;font-weight:900;color:var(--gold-hi)}
+.pass-info p{font-size:8.2pt;color:#c7d0db;line-height:1.4}
+.pass-qr{padding:3.6mm 4mm;border-left:.35mm dashed rgba(201,164,92,.55);display:flex;flex-direction:column;align-items:center;gap:1.6mm;justify-content:center}
+.pass-qr .q{background:#fff;padding:1.2mm;border-radius:1.2mm;width:22mm;height:22mm}
+.pass-qr .q img,.pass-qr .q canvas{width:100%!important;height:100%!important}
+.pass-qr span{font-family:var(--f-mono);font-size:6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+
+/* digital: under 900px the sheet becomes a fluid page */
+@media screen and (max-width:900px){
+  .desk{padding:0;gap:0}
+  .sheet{width:100%;height:auto;box-shadow:none;padding:24px max(16px,env(safe-area-inset-left,0px)) 24px max(16px,env(safe-area-inset-right,0px));gap:22px;font-size:15px;overflow:visible}
+  .sheet + .sheet{border-top:6px solid var(--navy)}
+  .sheet::before{display:none}
+  .s-head{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:14px}
+  .brand .seal{width:44px;height:44px}
+  .brand b{font-size:1.8rem}
+  .brand span{font-size:1.05rem}
+  .flight{grid-template-columns:repeat(3,auto);gap:4px 18px}
+  .flight span{font-size:.62rem}.flight b{font-size:.85rem}
+  .s-title{flex-direction:column;align-items:flex-start;gap:6px}
+  .s-title h1{font-size:2.8rem}
+  .s-title p{text-align:left;font-size:1.2rem;max-width:none}
+  .cols{grid-template-columns:1fr;gap:28px}
+  .col{gap:28px;justify-content:flex-start}
+  .gate{width:32px;height:32px;font-size:1.2rem;border-radius:5px}
+  .cat-h{gap:10px;margin-bottom:6px}
+  .cat-h h2{font-size:1.7rem}
+  .cat-h .note{font-size:.62rem}
+  .items{gap:12px}
+  .it{column-gap:8px}
+  .it .n{font-size:1rem}.it .n i{font-size:.8rem}
+  .it .p{font-size:.95rem}
+  .it .d{font-size:.86rem}
+  .it .lead{transform:translateY(-4px);border-bottom-width:2px}
+  .it.two{grid-template-columns:auto 1fr 56px 56px}
+  .sizes{grid-template-columns:1fr 56px 56px;font-size:.62rem;column-gap:8px;margin-bottom:-4px}
+  .extras{padding:12px 14px;border-radius:10px;gap:4px}
+  .extras b{font-size:.68rem}.extras p{font-size:.88rem}
+  .photo{border-radius:10px;aspect-ratio:16/10}
+  .photo-row .photo{aspect-ratio:1}
+  .photo figcaption{font-size:.62rem;left:8px;bottom:8px;padding:4px 8px}
+  .pass{grid-template-columns:1fr 1fr;border-radius:12px}
+  .pass-info{grid-column:1/-1;padding:18px}
+  .pass-info .k{font-size:.62rem}.pass-info h3{font-size:1.8rem}.pass-info p{font-size:.88rem}
+  .pass-qr{border-left:0;border-top:2px dashed rgba(201,164,92,.55);padding:16px}
+  .pass-qr + .pass-qr{border-left:2px dashed rgba(201,164,92,.55)}
+  .pass-qr .q{width:110px;height:110px;padding:6px;border-radius:6px}
+  .pass-qr span{font-size:.62rem}
+  .s-foot{flex-direction:column;align-items:flex-start;gap:6px;font-size:.62rem;padding-top:12px}
+}
+
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body::before,.top{display:none!important}
+  .desk{padding:0;gap:0}
+  .sheet{box-shadow:none;page-break-after:always;break-after:page}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 24 24"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></symbol>
+  <symbol id="seal" viewBox="0 0 100 100">
+    <defs><path id="ring" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs>
+    <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="1"/>
+    <text font-family="Archivo, sans-serif" font-size="7.4" font-weight="700" letter-spacing="2.6" fill="currentColor"><textPath href="#ring">AEROSANDWICH • SABOR QUE DESPEGA •</textPath></text>
+    <g transform="translate(50 50) rotate(-35) translate(-14 -14) scale(1.17)"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></g>
+  </symbol>
+</svg>
+
+<header class="top">
+  <div class="in">
+    <a class="logo" href="index.html"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
+    <div class="actions">
+      <a class="btn btn-ghost" href="index.html">Pedir en la web</a>
+      <button class="btn btn-accent" id="printBtn" type="button" hidden>Imprimir carta</button>
+    </div>
+  </div>
+</header>
+
+<main class="desk">
+  <!-- ================= FRENTE ================= -->
+  <article class="sheet" aria-label="Carta, frente: comida">
+    <div class="s-head">
+      <div class="brand"><svg class="seal"><use href="#seal"/></svg><div><b>Aerosandwich</b><span>Sándwiches &amp; café</span></div></div>
+      <div class="flight">
+        <div><span>Vuelo</span><b>AS 01</b></div>
+        <div><span>Salidas</span><b>Lun–Sáb 08:00</b></div>
+        <div><span>Puerta</span><b>1 de 2</b></div>
+      </div>
+    </div>
+    <div class="s-title">
+      <h1>Menú <em>a bordo</em></h1>
+      <p>Hecho al momento, con pan del día y palta de verdad.</p>
+    </div>
+    <div class="cols">
+      <div class="col" id="f-left"></div>
+      <div class="col" id="f-right"></div>
+    </div>
+    <div class="s-foot"><span>Precios en pesos chilenos · IVA incluido</span><span><b>Da vuelta la carta</b> · Cafetería y dulces →</span></div>
+  </article>
+
+  <!-- ================= REVERSO ================= -->
+  <article class="sheet" aria-label="Carta, reverso: cafetería y dulces">
+    <div class="s-head">
+      <div class="brand"><svg class="seal"><use href="#seal"/></svg><div><b>Aerosandwich</b><span>Sándwiches &amp; café</span></div></div>
+      <div class="flight">
+        <div><span>Vuelo</span><b>AS 02</b></div>
+        <div><span>Servicio</span><b>Cafetería</b></div>
+        <div><span>Puerta</span><b>2 de 2</b></div>
+      </div>
+    </div>
+    <div class="s-title">
+      <h1>Café <em>&amp; dulces</em></h1>
+      <p>Para el despegue de la mañana o la escala de la tarde.</p>
+    </div>
+    <div class="cols">
+      <div class="col" id="b-left"></div>
+      <div class="col" id="b-right"></div>
+    </div>
+    <div class="pass">
+      <div class="pass-info">
+        <span class="k">Tarjeta de embarque · Pasajero frecuente</span>
+        <h3>Califica tu vuelo</h3>
+        <p><span id="addr">Av. Ejemplo 1234, Santiago</span> · Lun a Vie 08:00–20:00 · Sáb 09:00–16:00<br>Instagram <b id="ig">@aerosandwich</b> · WhatsApp <b id="wa">+56 9 0000 0000</b></p>
+      </div>
+      <div class="pass-qr"><div class="q" data-qr="review"></div><span>Califícanos</span></div>
+      <div class="pass-qr"><div class="q" data-qr="wa"></div><span>Pide por WhatsApp</span></div>
+    </div>
+  </article>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ====== CARTA: edita aquí productos y precios ====== */
+const LINKS = {
+  review: "https://www.google.com/maps/search/?api=1&query=Aerosandwich",
+  wa: "https://wa.me/56900000000?text=" + encodeURIComponent("Hola Aerosandwich! Quiero hacer un pedido.")
+};
+const CARTA = {
+  "f-left": [
+    {gate:"A", title:"Sándwiches", note:"Frica, marraqueta<br>o ciabatta", items:[
+      ["Churrasco Italiano", 6490, "Carne a la plancha, tomate, palta y mayo casera.", true],
+      ["Chacarero", 6990, "Carne, porotos verdes, tomate y ají verde.", true],
+      ["Barros Luco", 5990, "Carne a la plancha y queso fundido."],
+      ["Lomito Italiano", 6290, "Lomo de cerdo, tomate, palta y mayo."],
+      ["Mechada Luco", 6490, "Carne mechada de la casa con queso fundido."],
+      ["Ciabatta Serrano", 6990, "Jamón serrano, mozzarella, rúcula y tomate seco."],
+      ["Ave Palta", 4990, "Pollo desmenuzado, palta y mayo casera."],
+      ["Ave Mayo", 4490, "Pollo desmenuzado, apio y mayo casera."],
+      ["Vegetariano", 5490, "Champiñones salteados, queso, tomate, palta y rúcula."],
+      ["Barros Jarpa", 3990, "Jamón y queso fundido en marraqueta."]
+    ]},
+    {extras:true},
+    {gate:"D", title:"Para compartir", items:[
+      ["Chorrillana", 12990, "Papas, carne, longaniza, cebolla y huevos fritos. Para 2.", true],
+      ["Papas cheddar tocino", 5490, "Papas fritas con salsa cheddar y tocino."],
+      ["Papas fritas", 2990, "Porción individual. Grande $4.490."]
+    ]}
+  ],
+  "f-right": [
+    {photo:["img/churrasco.webp","Churrasco Italiano"], ratio:"16/9"},
+    {gate:"B", title:"Hamburguesas", note:"Pan brioche", items:[
+      ["Doble Bacon", 7490, "Dos carnes, cheddar, tocino, cebolla morada y tomate.", true],
+      ["Aero Burger", 6990, "Carne, cheddar, cebolla caramelizada y salsa de la casa."],
+      ["Clásica", 5490, "Carne, queso, tomate y lechuga."]
+    ]},
+    {gate:"C", title:"Completos", items:[
+      ["Italiano", 2990, "Palta, tomate y mayo casera."],
+      ["Dinámico", 3290, "Palta, tomate, americana, chucrut y mayo."],
+      ["Tradicional", 2790, "Tomate, chucrut, americana y mayo."],
+      ["As Italiano", 4490, "Carne picada a la plancha, palta, tomate y mayo."]
+    ]},
+    {photo:["img/chorrillana.webp","Chorrillana para 2"], ratio:"16/9"}
+  ],
+  "b-left": [
+    {gate:"E", title:"Desayunos", note:"Hasta las 12:00", items:[
+      ["Desayuno Despegue", 5990, "Café a elección, tostadas con palta y jugo natural.", true],
+      ["Tostadas con palta", 2990, "Pan de molde o marraqueta, palta molida."],
+      ["Huevos revueltos", 3490, "Con pan tostado y mantequilla."],
+      ["Croissant jamón queso", 3290, "Croissant de mantequilla, tibio."],
+      ["Medialuna", 1200, "Recién horneada."]
+    ]},
+    {gate:"F", title:"Cafetería", note:"Leche vegetal +$500", sizes:true, items:[
+      ["Espresso", [1800,2300]],
+      ["Americano", [2000,2500]],
+      ["Cortado", [2200,2700]],
+      ["Cappuccino", [2800,3300]],
+      ["Latte", [2900,3400]],
+      ["Mokaccino", [3200,3700]],
+      ["Chocolate caliente", [2900,3400]],
+      ["Té o infusión", [1500,1900]]
+    ]},
+    {info:["Nuestro café", "Grano 100% arábica, tostado medio y molido al momento. Leche entera, descremada o vegetal. Pide tu café para llevar en vaso de 12 oz."]}
+  ],
+  "b-right": [
+    {photos:[["img/pie-limon.webp","Pie de limón"],["img/tres-leches.webp","Tres leches"]]},
+    {gate:"G", title:"Dulces", note:"Por trozo", items:[
+      ["Pie de limón", 2990, "Merengue tostado y crema de limón.", true],
+      ["Torta tres leches", 3290, "Bizcocho húmedo con merengue."],
+      ["Kuchen del día", 2690, "Pregunta por el sabor de hoy."],
+      ["Brownie", 1990, "Chocolate semiamargo y nueces."]
+    ]},
+    {gate:"H", title:"Bebidas frías", items:[
+      ["Frappé café o moka", 3990, "Con crema batida."],
+      ["Jugo natural", 2800, "Frutilla, piña o mango. 500 ml."],
+      ["Limonada menta jengibre", 2900, "Hecha al momento."],
+      ["Bebida en lata", 1500, ""],
+      ["Agua mineral", 1200, "Con o sin gas."]
+    ]}
+  ]
+};
+const clp = n => "$" + n.toLocaleString("es-CL");
+function block(b){
+  if (b.info) return `<div class="extras"><b>${b.info[0]}</b><p>${b.info[1]}</p></div>`;
+  if (b.extras) return `<div class="extras"><b>Agregados</b><p>Palta +$900 · Queso +$700 · Tocino +$900 · Huevo +$600 · Pan ciabatta +$500</p></div>`;
+  if (b.photo) return `<figure class="photo" style="aspect-ratio:${b.ratio||"16/9"}"><img src="${b.photo[0]}" alt="${b.photo[1]}"><figcaption>${b.photo[1]}</figcaption></figure>`;
+  if (b.photos) return `<div class="photo-row">${b.photos.map(p=>`<figure class="photo" style="aspect-ratio:1"><img src="${p[0]}" alt="${p[1]}"><figcaption>${p[1]}</figcaption></figure>`).join("")}</div>`;
+  const rows = b.items.map(([n,p,d,star]) => Array.isArray(p)
+    ? `<div class="it two"><span class="n">${n}</span><span class="lead"></span><span class="p">${clp(p[0])}</span><span class="p">${clp(p[1])}</span></div>`
+    : `<div class="it"><span class="n">${n}${star?'<i>★</i>':''}</span><span class="lead"></span><span class="p">${clp(p)}</span>${d?`<span class="d">${d}</span>`:""}</div>`).join("");
+  return `<section><div class="cat-h"><span class="gate">${b.gate}</span><h2>${b.title}</h2>${b.note?`<span class="note">${b.note}</span>`:""}</div>
+    ${b.sizes?`<div class="sizes"><span style="text-align:left"></span><span>Chico</span><span>Grande</span></div>`:""}
+    <div class="items">${rows}</div></section>`;
+}
+Object.entries(CARTA).forEach(([id, blocks]) => { document.getElementById(id).innerHTML = blocks.map(block).join(""); });
+document.querySelectorAll("[data-qr]").forEach(el => { try{ new QRCode(el,{text:LINKS[el.dataset.qr],width:200,height:200,colorDark:"#0E2136",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M}); }catch(e){} });
+
+if (/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) || location.protocol === "file:") {
+  const pb = document.getElementById("printBtn"); pb.hidden = false; pb.addEventListener("click", () => window.print());
+} else {
+  document.querySelectorAll('a[href="index.html"]').forEach(a => { a.href = "https://claude.ai/artifact/Ec5iXgfhizWnnTfBwdfG6L"; a.target = "_blank"; a.rel = "noopener"; });
+}
+</script>

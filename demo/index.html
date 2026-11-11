@@ -45,6 +45,7 @@ p{margin:0}
 .sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;max-width:640px}
 .sec-head h2{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900;text-transform:uppercase}
 .sec-head p{color:var(--muted);font-size:1.05rem}
+.carta-link{font-weight:600;color:var(--accent-text);text-decoration:none;align-self:flex-start;border-bottom:2px solid currentColor}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;border:0;font-weight:600;text-decoration:none;transition:transform .15s ease,background .15s ease}
@@ -374,6 +375,7 @@ footer .logo{color:var(--night-ink)}
         <span class="eyebrow">Carta de vuelo</span>
         <h2>Nuestra carta</h2>
         <p>Agrega lo que quieras y envía tu pedido por WhatsApp.</p>
+        <a class="carta-link" href="carta.html">Ver la carta completa →</a>
       </div>
     </div>
     <div class="chips"><div class="wrap chips-row" id="chips"></div></div>
@@ -542,6 +544,12 @@ const MENU = [
     {id:"mokaccino", code:"AS 506", name:"Mokaccino", desc:"Café, chocolate y leche.", price:3200},
     {id:"te", code:"AS 507", name:"Té o infusión", desc:"Variedades a elección.", price:1500}
   ]},
+  {cat:"Dulces", items:[
+    {id:"pielimon", code:"AS 701", name:"Pie de Limón", desc:"Merengue tostado y crema de limón. Por trozo.", price:2990, img:"img/pie-limon.webp"},
+    {id:"tresleches", code:"AS 702", name:"Torta Tres Leches", desc:"Bizcocho húmedo con merengue. Por trozo.", price:3290, img:"img/tres-leches.webp"},
+    {id:"kuchen", code:"AS 703", name:"Kuchen del día", desc:"Pregunta por el sabor de hoy.", price:2690},
+    {id:"brownie", code:"AS 704", name:"Brownie", desc:"Chocolate semiamargo y nueces.", price:1990}
+  ]},
   {cat:"Bebestibles", items:[
     {id:"lata", code:"AS 601", name:"Bebida en lata", desc:"350 ml, sabores a elección.", price:1500},
     {id:"jugo", code:"AS 602", name:"Jugo natural", desc:"Frutilla, piña o mango. 500 ml.", price:2800},
@@ -571,6 +579,9 @@ document.querySelectorAll(".js-wa").forEach(a => a.href = waLink(`Hola ${CONFIG.
 document.querySelectorAll(".js-ig").forEach(a => a.href = `https://instagram.com/${CONFIG.instagram}`);
 document.querySelectorAll(".js-maps").forEach(a => a.href = CONFIG.mapa);
 document.querySelectorAll(".js-review").forEach(a => a.href = CONFIG.resenaGoogle);
+if (!/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) && location.protocol !== "file:") {
+  document.querySelectorAll('a[href="carta.html"]').forEach(a => { a.href = "https://claude.ai/artifact/Fiw31rPrUV5dzNZbzs5JzH"; a.target = "_blank"; a.rel = "noopener"; });
+}
 $("#addr").textContent = CONFIG.direccion; $("#comuna").textContent = CONFIG.comuna;
 $("#waText").textContent = CONFIG.whatsappTexto; $("#igText").textContent = "@" + CONFIG.instagram;
 

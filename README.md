@@ -24,6 +24,13 @@ Página de muestra para **Aerosandwich**, sandwichería y cafetería. Usa un tem
 
 Los enlaces de los QR están en `LINKS`, al final del archivo.
 
+## Tarjeta NFC y carta
+
+- `demo/tarjeta-nfc.html`: diseño de la tarjeta NFC. El frente es tipo pasaporte y el reverso tipo tarjeta de embarque. Incluye una planilla A4 lista para imprimir (10 tarjetas por lado, tamaño real 85,6 × 54 mm).
+- `demo/carta.html`: carta "Menú a bordo". Son dos hojas A4 para imprimir, y en el celular se ve como carta digital. Los productos y precios están en `CARTA`, dentro del script.
+
+Para imprimir, abre la página en el navegador, usa el botón "Imprimir" y elige A4 sin márgenes. La carta se imprime con "Gráficos de fondo" activado.
+
 ## Ver la demo
 
 Abre `demo/index.html` en el navegador, o levanta un servidor local:

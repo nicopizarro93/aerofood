@@ -1,0 +1,232 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tarjeta NFC Aerosandwich</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
+<style>
+/* Layout: card spec sheet. Two large previews (passport cover front, boarding-pass back), specs, and a hidden A4 print sheet (10 cards per side, real size 85.6 x 54 mm). */
+:root{
+  --bg:#F1F3F6; --surface:#FFFFFF; --surface-2:#E7EBF0; --ink:#121821; --muted:#566271; --line:#D5DBE3; --accent:#F0A83A; --accent-ink:#1B1205; --accent-text:#9C5A06;
+  --night:#0C1015; --night-ink:#F2EFE8; --night-muted:#9AA5B2;
+  --navy:#0E2136; --navy-2:#1B3556; --gold:#C9A45C; --gold-hi:#F1DDA4; --gold-lo:#9C7A35; --cream:#F6F1E7; --pass-ink:#13243A;
+  --shadow:0 1px 2px rgba(18,24,33,.06),0 10px 30px rgba(18,24,33,.10);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --f-serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1117;--surface:#151B23;--surface-2:#1C232D;--ink:#EDF0F4;--muted:#9AA6B4;--line:#27303C;--accent-text:#F2B04A;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1117;--surface:#151B23;--surface-2:#1C232D;--ink:#EDF0F4;--muted:#9AA6B4;--line:#27303C;--accent-text:#F2B04A;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--night)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);text-transform:uppercase;line-height:.95;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1140px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--night);color:var(--night-ink)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink)}
+.logo-mark svg{width:22px;height:22px;transform:rotate(-35deg)}
+.logo-word{font-family:var(--f-display);font-weight:900;font-size:1.5rem;text-transform:uppercase;line-height:1}
+.logo-word span{color:var(--accent)}
+.top .actions{margin-left:auto;display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border-radius:999px;border:0;font:inherit;font-weight:600;font-size:.92rem;text-decoration:none;cursor:pointer}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:transparent;color:var(--night-ink);box-shadow:inset 0 0 0 1.5px rgba(242,239,232,.35)}
+@media (max-width:520px){.top .btn-ghost{display:none}}
+.head{padding-block:48px 28px;display:flex;flex-direction:column;gap:12px;max-width:720px}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+.head h1{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:900}
+.head p{color:var(--muted);font-size:1.06rem}
+.previews{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding-bottom:16px}
+.previews figure{margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
+.previews figcaption{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center}
+@media (max-width:820px){.previews{grid-template-columns:1fr}}
+.specs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-block:32px 72px}
+.spec{background:var(--surface);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+.spec .eyebrow{font-size:.68rem}
+.spec b{display:block;font-size:1.05rem;margin-top:4px}
+.spec p{color:var(--muted);font-size:.92rem;margin-top:4px}
+@media (max-width:820px){.specs{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.specs{grid-template-columns:1fr}}
+
+/* ============ CARD (scales with its container; 1em = card width / 30) ============ */
+.cardbox{container-type:inline-size;width:100%}
+.ncard{width:100%;aspect-ratio:85.6/54;border-radius:1.15em;overflow:hidden;position:relative;font-size:3.333cqw;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:0 1.2em 2.6em rgba(10,20,35,.28)}
+/* front: passport cover */
+.pp{background:radial-gradient(120% 95% at 88% 112%,var(--navy-2) 0%,var(--navy) 52%,#091727 100%);color:var(--gold)}
+.pp::before{content:"";position:absolute;inset:0;background:
+  repeating-radial-gradient(circle at 96% 115%,transparent 0 .46em,rgba(201,164,92,.12) .46em .5em),
+  repeating-radial-gradient(circle at -6% -20%,transparent 0 .46em,rgba(201,164,92,.07) .46em .5em);
+  -webkit-mask-image:linear-gradient(115deg,#000 0%,transparent 45%,transparent 55%,#000 100%);mask-image:linear-gradient(115deg,#000 0%,transparent 45%,transparent 55%,#000 100%)}
+.pp::after{content:"";position:absolute;inset:.7em;border:.06em solid rgba(201,164,92,.6);border-radius:.6em;pointer-events:none}
+.pp-in{position:absolute;inset:1.35em 1.6em;display:flex;flex-direction:column;justify-content:space-between}
+.pp-row{display:flex;justify-content:space-between;align-items:center;gap:1em}
+.pp-kicker{font-family:var(--f-body);font-weight:600;font-size:.62em;letter-spacing:.42em;text-transform:uppercase}
+.pp-kicker.dim{color:rgba(201,164,92,.7);letter-spacing:.3em}
+.pp-mid{display:flex;align-items:center;gap:1.2em}
+.seal{width:6.2em;height:6.2em;flex:none;color:var(--gold)}
+.pp-name{display:flex;flex-direction:column;gap:.15em;min-width:0}
+.pp-word{font-family:var(--f-display);font-weight:900;font-size:2.55em;letter-spacing:.06em;line-height:.9;text-transform:uppercase;background:linear-gradient(180deg,var(--gold-hi) 0%,var(--gold) 55%,var(--gold-lo) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pp-sub{font-family:var(--f-serif);font-style:italic;font-weight:500;font-size:1.25em;color:#E9DDBF;line-height:1}
+.pp-tap{display:flex;align-items:center;gap:.6em}
+.pp-tap svg{width:1.7em;height:1.7em}
+.pp-tap span{font-size:.56em;letter-spacing:.24em;text-transform:uppercase;font-weight:600;line-height:1.35}
+.pp-no{font-family:var(--f-mono);font-size:.62em;letter-spacing:.12em;color:rgba(201,164,92,.75)}
+/* back: boarding pass */
+.bp{background:var(--cream);color:var(--pass-ink);display:grid;grid-template-columns:1fr 8.9em;grid-template-rows:2.5em 1fr}
+.bp-band{grid-column:1/-1;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 1.3em}
+.bp-band .t{font-size:.6em;letter-spacing:.32em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:.8em}
+.bp-band .t svg{width:1.6em;height:1.6em;transform:rotate(45deg)}
+.bp-band .w{font-family:var(--f-display);font-weight:900;font-size:1.05em;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi)}
+.bp-main{padding:.9em 1.1em .8em 1.3em;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.route{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.6em}
+.route .code{font-family:var(--f-display);font-weight:900;font-size:2.7em;line-height:.85;letter-spacing:.02em}
+.route .code.stars{color:#B8862E;font-size:2.2em;letter-spacing:-.02em}
+.route .lbl{display:block;font-family:var(--f-mono);font-size:.5em;letter-spacing:.14em;text-transform:uppercase;color:#6c7480;margin-top:.5em}
+.route .path{position:relative;height:1.4em;display:grid;place-items:center}
+.route .path::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:.08em dashed #9aa3ae}
+.route .path svg{position:relative;width:1.4em;height:1.4em;transform:rotate(90deg);background:var(--cream);padding:0 .15em;color:var(--pass-ink)}
+.fields{display:grid;grid-template-columns:1.5fr 1fr .7fr;gap:.4em .8em}
+.fields span{font-family:var(--f-mono);font-size:.46em;letter-spacing:.14em;text-transform:uppercase;color:#6c7480;display:block}
+.fields b{font-size:.74em;font-weight:700;display:block;line-height:1.2}
+.barcode{height:1.25em;background:repeating-linear-gradient(90deg,var(--pass-ink) 0 .08em,transparent .08em .2em,var(--pass-ink) .2em .24em,transparent .24em .3em,var(--pass-ink) .3em .42em,transparent .42em .5em,var(--pass-ink) .5em .54em,transparent .54em .7em);opacity:.85}
+.bp-stub{border-left:.08em dashed #9aa3ae;padding:.8em .9em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45em;position:relative}
+.bp-stub::before,.bp-stub::after{content:"";position:absolute;left:-.45em;width:.8em;height:.8em;border-radius:50%;background:var(--navy)}
+.bp-stub::before{top:-.4em}.bp-stub::after{bottom:-.4em;background:#d9d2c4}
+.qr{background:#fff;border-radius:.35em;padding:.3em;width:6.4em;height:6.4em;display:grid;place-items:center}
+.qr img,.qr canvas{width:100%!important;height:100%!important}
+.bp-stub p{font-size:.48em;letter-spacing:.14em;text-transform:uppercase;text-align:center;font-weight:700;line-height:1.35}
+.bp-stub .nfc{display:flex;align-items:center;gap:.3em;color:var(--navy)}
+.bp-stub .nfc svg{width:1.1em;height:1.1em}
+
+/* print sheet */
+.print{display:none}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body::before,.top,.screen{display:none!important}
+  .print{display:block}
+  .sheet{width:210mm;height:297mm;display:grid;grid-template-columns:repeat(2,85.6mm);grid-auto-rows:54mm;gap:4mm 6mm;justify-content:center;align-content:center;page-break-after:always;break-after:page}
+  .sheet .cardbox{width:85.6mm}
+  .sheet .ncard{box-shadow:0 0 0 .2mm #c8c8c8;border-radius:3.2mm}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 24 24"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></symbol>
+  <symbol id="i-nfc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M7.5 8.5a5 5 0 0 1 0 7M11 6a8.5 8.5 0 0 1 0 12M14.5 3.5a12 12 0 0 1 0 17M4 11v2"/></symbol>
+  <symbol id="seal" viewBox="0 0 100 100">
+    <defs><path id="ring" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs>
+    <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.2"/>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width=".5"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width=".8"/>
+    <text font-family="Archivo, sans-serif" font-size="7.2" font-weight="700" letter-spacing="2.6" fill="currentColor"><textPath href="#ring">AEROSANDWICH • SABOR QUE DESPEGA •</textPath></text>
+    <g transform="translate(50 50) rotate(-35) translate(-14 -14) scale(1.17)"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></g>
+    <g fill="currentColor"><circle cx="50" cy="24" r="1.2"/><circle cx="50" cy="76" r="1.2"/><circle cx="24" cy="50" r="1.2"/><circle cx="76" cy="50" r="1.2"/></g>
+  </symbol>
+</svg>
+
+<template id="tpl-front">
+  <div class="cardbox"><div class="ncard pp">
+    <div class="pp-in">
+      <div class="pp-row"><span class="pp-kicker">Pasaporte</span><span class="pp-kicker dim">República del sabor</span></div>
+      <div class="pp-mid">
+        <svg class="seal"><use href="#seal"/></svg>
+        <div class="pp-name"><span class="pp-word">Aerosandwich</span><span class="pp-sub">Sándwiches &amp; café</span></div>
+      </div>
+      <div class="pp-row">
+        <div class="pp-tap"><svg><use href="#i-nfc"/></svg><span>Acerca tu celular<br>Califica tu vuelo</span></div>
+        <span class="pp-no">Nº AS·0001</span>
+      </div>
+    </div>
+  </div></div>
+</template>
+<template id="tpl-back">
+  <div class="cardbox"><div class="ncard bp">
+    <div class="bp-band"><span class="t"><svg><use href="#i-plane"/></svg>Tarjeta de embarque</span><span class="w">Aerosandwich</span></div>
+    <div class="bp-main">
+      <div class="route">
+        <div><span class="code">Mesa</span><span class="lbl">Desde · tu mesa</span></div>
+        <div class="path"><svg><use href="#i-plane"/></svg></div>
+        <div><span class="code stars">★★★★★</span><span class="lbl">Hacia · Google</span></div>
+      </div>
+      <div class="fields">
+        <div><span>Pasajero</span><b>Cliente frecuente</b></div>
+        <div><span>Vuelo</span><b>AS 2026</b></div>
+        <div><span>Puerta</span><b>04</b></div>
+      </div>
+      <div class="barcode" aria-hidden="true"></div>
+    </div>
+    <div class="bp-stub">
+      <div class="qr" data-qr></div>
+      <p>Escanea o<br>acerca tu celular</p>
+    </div>
+  </div></div>
+</template>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="propuesta.html"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
+    <div class="actions">
+      <a class="btn btn-ghost" href="propuesta.html">Volver a la propuesta</a>
+      <button class="btn btn-accent" id="printBtn" type="button" hidden>Imprimir planilla</button>
+    </div>
+  </div>
+</header>
+
+<main class="screen">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Diseño · tarjeta NFC</span>
+      <h1>Pasaporte del sabor</h1>
+      <p>Por delante, la tapa de un pasaporte: azul profundo, sello y letras doradas. Por detrás, una tarjeta de embarque con la ruta “de tu mesa a Google” y un QR para los celulares sin NFC.</p>
+    </div>
+    <div class="previews">
+      <figure><div id="pvFront"></div><figcaption>Frente · tapa de pasaporte</figcaption></figure>
+      <figure><div id="pvBack"></div><figcaption>Reverso · tarjeta de embarque</figcaption></figure>
+    </div>
+    <div class="specs">
+      <div class="spec"><span class="eyebrow">Tamaño</span><b>85,6 × 54 mm</b><p>Formato tarjeta de crédito, esquinas redondeadas.</p></div>
+      <div class="spec"><span class="eyebrow">Material</span><b>PVC blanco con chip NTAG215</b><p>El chip va integrado o como sticker por detrás.</p></div>
+      <div class="spec"><span class="eyebrow">Terminación</span><b>Mate soft-touch</b><p>Opcional: dorado en relieve (hot stamping) para el sello y el nombre.</p></div>
+      <div class="spec"><span class="eyebrow">Impresión</span><b>Planilla A4, 10 por lado</b><p>Frente en la hoja 1 y reverso en la hoja 2, a doble cara.</p></div>
+      <div class="spec"><span class="eyebrow">Enlace</span><b>Reseña en Google</b><p>El chip y el QR llevan al mismo enlace de reseña.</p></div>
+      <div class="spec"><span class="eyebrow">Numeración</span><b>Nº AS·0001 en adelante</b><p>Un número por mesa, útil para saber cuál se pierde.</p></div>
+    </div>
+  </div>
+</main>
+
+<div class="print" id="print"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const REVIEW_LINK = "https://www.google.com/maps/search/?api=1&query=Aerosandwich"; // cambiar por https://g.page/r/XXXX/review
+const tpl = id => document.getElementById(id).content.firstElementChild.cloneNode(true);
+function makeQR(el){ try{ new QRCode(el,{text:REVIEW_LINK,width:220,height:220,colorDark:"#13243A",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M}); }catch(e){} }
+document.getElementById("pvFront").append(tpl("tpl-front"));
+const back = tpl("tpl-back"); document.getElementById("pvBack").append(back); makeQR(back.querySelector("[data-qr]"));
+
+/* print sheets: 10 fronts + 10 backs, numbered */
+const pr = document.getElementById("print");
+const s1 = document.createElement("div"); s1.className = "sheet";
+const s2 = document.createElement("div"); s2.className = "sheet";
+for (let i = 1; i <= 10; i++){
+  const f = tpl("tpl-front"); f.querySelector(".pp-no").textContent = "Nº AS·" + String(i).padStart(4,"0"); s1.append(f);
+  const b = tpl("tpl-back"); b.querySelector(".fields div:last-child b").textContent = String(i).padStart(2,"0"); s2.append(b); makeQR(b.querySelector("[data-qr]"));
+}
+pr.append(s1, s2);
+
+/* print button only where printing works (GitHub Pages / local) */
+if (/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) || location.protocol === "file:") {
+  const pb = document.getElementById("printBtn"); pb.hidden = false; pb.addEventListener("click", () => window.print());
+} else {
+  document.querySelectorAll('a[href="propuesta.html"]').forEach(a => { a.href = "https://claude.ai/artifact/Mofz8Qjoghx8CT8Yxu1a81"; a.target = "_blank"; a.rel = "noopener"; });
+}
+</script>
