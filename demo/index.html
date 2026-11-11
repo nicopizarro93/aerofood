@@ -243,6 +243,69 @@ p{margin:0}
 .where .btn{align-self:flex-start}
 .where .contact{margin-top:8px}
 .combo-copy p{font-size:1.05rem;max-width:28em}
+.combo-price .save{font-family:var(--f-mono);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--accent-ink);color:var(--accent);padding:5px 10px;border-radius:999px}
+
+/* promos */
+.promo-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;margin-top:20px;align-items:start}
+@media (max-width:860px){.promo-grid{grid-template-columns:1fr}}
+.daily{background:var(--night);color:var(--night-ink);border-radius:20px;padding:22px clamp(16px,2.4vw,26px) 12px;min-width:0}
+.daily-head{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.daily-head h3{display:flex;align-items:center;gap:10px;font-size:1.9rem;font-weight:900;text-transform:uppercase;color:var(--flap-ink)}
+.daily-head h3 svg{width:24px;height:24px}
+.daily-head .mono{color:var(--night-muted);font-size:.7rem}
+.day{display:grid;grid-template-columns:48px 1fr auto auto;gap:4px 12px;align-items:center;padding:12px 10px;border-top:1px dashed rgba(255,255,255,.1);border-radius:10px}
+.day .d{font-family:var(--f-mono);font-weight:700;font-size:.8rem;color:var(--night-muted);text-transform:uppercase;letter-spacing:.08em}
+.day .n{font-weight:600;min-width:0}
+.day .pr{font-family:var(--f-mono);font-weight:700;text-align:right;white-space:nowrap}
+.day .pr s{display:block;font-weight:500;font-size:.72rem;color:var(--night-muted)}
+.day .slot{width:96px;display:flex;justify-content:flex-end}
+.day.today{background:var(--accent);color:var(--accent-ink);border-top-color:transparent}
+.day.today + .day{border-top-color:transparent}
+.day.today .d{color:var(--accent-ink)}
+.day.today .pr s{color:rgba(27,18,5,.6)}
+.day .hoy{font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--accent-ink);color:var(--accent);padding:3px 7px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.day.today .add{background:var(--accent-ink);color:var(--accent)}
+.daily-note{font-size:.82rem;color:var(--night-muted);padding:10px 10px 6px}
+@media (max-width:480px){.day{grid-template-columns:40px 1fr auto}.day .slot{grid-column:1/-1;width:auto;justify-content:flex-start}.day .slot:empty{display:none}}
+.tickets{display:flex;flex-direction:column;gap:14px;min-width:0}
+.ticket{display:grid;grid-template-columns:1fr 128px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.ticket-main{padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ticket-when{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text);font-weight:700}
+.ticket h3{font-size:1.7rem;font-weight:800;text-transform:uppercase}
+.ticket p{color:var(--muted);font-size:.92rem}
+.ticket-stub{position:relative;border-left:2px dashed var(--line);padding:14px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.ticket-stub::before,.ticket-stub::after{content:"";position:absolute;left:-10px;width:18px;height:18px;border-radius:50%;background:var(--bg)}
+.ticket-stub::before{top:-9px}.ticket-stub::after{bottom:-9px}
+.ticket-stub .price{font-size:1.25rem}
+.ticket-stub s{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);margin-top:-4px}
+.ticket-stub .add{padding:8px 12px 8px 10px;font-size:.85rem}
+.ticket-alt{background:var(--night);color:var(--night-ink)}
+.ticket-alt h3{color:var(--flap-ink)}
+.ticket-alt p{color:var(--night-muted)}
+.ticket-alt .ticket-when{color:var(--sky)}
+.ticket-alt .ticket-stub{border-left-color:rgba(255,255,255,.15)}
+.ticket-alt .ticket-stub .mono{color:var(--night-muted);font-size:.65rem}
+.stamp-ico{width:56px;height:56px;border-radius:50%;border:2px solid var(--flap-ink);color:var(--flap-ink);display:grid;place-items:center;transform:rotate(-12deg)}
+.stamp-ico svg{width:28px;height:28px;transform:rotate(-35deg)}
+@media (max-width:420px){.ticket{grid-template-columns:1fr 108px}.ticket h3{font-size:1.45rem}}
+
+/* carta overlay */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(16px,env(safe-area-inset-left,0px));background:rgba(5,8,12,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s}
+.modal.on{opacity:1;visibility:visible}
+.modal-box{width:min(960px,100%);height:100%;background:var(--night);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.5);transform:translateY(16px) scale(.98);transition:transform .25s ease}
+.modal.on .modal-box{transform:none}
+.modal-head{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 20px;color:var(--night-ink)}
+.modal-head h3{font-size:1.5rem;font-weight:900;text-transform:uppercase;margin-right:auto}
+.modal-head h3 span{color:var(--accent)}
+.btn-sm{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;border:0;background:transparent;color:var(--night-ink);box-shadow:inset 0 0 0 1.5px rgba(242,239,232,.3);font:inherit;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer}
+.btn-sm:hover{box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--accent)}
+.modal-head .x{background:rgba(255,255,255,.08);color:var(--night-ink)}
+.modal iframe{flex:1;width:100%;border:0;background:#E4E7EC}
+@media (max-width:640px){
+  .modal{padding:0}
+  .modal-box{border-radius:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .modal-head .btn-sm.opt{display:none}
+}
 .map-card{border-radius:var(--r);overflow:hidden;position:relative;min-height:320px;background:var(--surface-2);display:flex;align-items:flex-end;box-shadow:var(--shadow)}
 .map-card svg.map{position:absolute;inset:0;width:100%;height:100%}
 .map-info{position:relative;margin:16px;background:var(--surface);border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;width:calc(100% - 32px);box-shadow:var(--shadow)}
@@ -331,6 +394,7 @@ footer .logo{color:var(--night-ink)}
       <span class="logo-word">Aero<span>sandwich</span></span>
     </a>
     <nav class="nav" aria-label="Secciones">
+      <a href="#promos">Promos</a>
       <a href="#carta">Carta</a>
       <a href="#nosotros">Nosotros</a>
       <a href="#califica">Califícanos</a>
@@ -372,30 +436,84 @@ footer .logo{color:var(--night-ink)}
     </div>
   </section>
 
+  <section class="sec" id="promos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Ofertas de vuelo</span>
+        <h2>Promociones</h2>
+        <p>Precios especiales por día y por horario. Agrégalas a tu pedido igual que cualquier producto.</p>
+      </div>
+
+      <div class="combo">
+        <div class="combo-copy">
+          <span class="mono">Todos los días</span>
+          <h2>Combo Despegue</h2>
+          <p>Churrasco o chacarero, papas fritas y bebida en lata.</p>
+          <div class="combo-price"><b>$8.990</b><s>$11.470</s><span class="save">Ahorras $2.480</span></div>
+          <button class="btn" type="button" data-add="combo">Agregar combo al pedido</button>
+        </div>
+        <div class="combo-img"><img src="img/papas.jpg" alt="Canasto de papas fritas doradas" loading="lazy" width="622" height="350"></div>
+      </div>
+
+      <div class="promo-grid">
+        <div class="daily" aria-labelledby="dailyTitle">
+          <div class="daily-head">
+            <h3 id="dailyTitle"><svg><use href="#i-plane"/></svg>Vuelo del día</h3>
+            <span class="mono">Un precio especial distinto cada día</span>
+          </div>
+          <div id="daily"></div>
+        </div>
+
+        <div class="tickets">
+          <article class="ticket">
+            <div class="ticket-main">
+              <span class="ticket-when">Lun a Vie · hasta 12:00</span>
+              <h3>Desayuno Despegue</h3>
+              <p>Café a elección, tostadas con palta y jugo natural.</p>
+            </div>
+            <div class="ticket-stub">
+              <span class="price">$5.990</span><s>$7.790</s>
+              <button class="add" type="button" data-add="desayuno"><svg><use href="#i-plus"/></svg>Agregar</button>
+            </div>
+          </article>
+          <article class="ticket">
+            <div class="ticket-main">
+              <span class="ticket-when">Todos los días · 16:00 a 19:00</span>
+              <h3>Once a bordo</h3>
+              <p>Cappuccino o latte con un trozo de torta tres leches o pie de limón.</p>
+            </div>
+            <div class="ticket-stub">
+              <span class="price">$4.990</span><s>$6.190</s>
+              <button class="add" type="button" data-add="once"><svg><use href="#i-plus"/></svg>Agregar</button>
+            </div>
+          </article>
+          <article class="ticket ticket-alt">
+            <div class="ticket-main">
+              <span class="ticket-when">Pasajero frecuente</span>
+              <h3>10° sándwich gratis</h3>
+              <p>Pide tu pasaporte de millas en caja. Un timbre por cada sándwich.</p>
+            </div>
+            <div class="ticket-stub">
+              <span class="stamp-ico" aria-hidden="true"><svg><use href="#i-plane"/></svg></span>
+              <span class="mono">En el local</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" id="carta">
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">Carta de vuelo</span>
         <h2>Nuestra carta</h2>
         <p>Agrega lo que quieras y envía tu pedido por WhatsApp.</p>
-        <a class="carta-link" href="carta.html">Ver la carta completa →</a>
+        <a class="carta-link" href="carta.html" data-carta>Ver la carta completa →</a>
       </div>
     </div>
     <div class="chips"><div class="wrap chips-row" id="chips"></div></div>
     <div class="wrap" id="menu"></div>
-
-    <div class="wrap">
-      <div class="combo">
-        <div class="combo-copy">
-          <span class="mono">Promo de la semana</span>
-          <h2>Combo Despegue</h2>
-          <p>Churrasco o chacarero, papas fritas y bebida en lata.</p>
-          <div class="combo-price"><b>$8.990</b></div>
-          <button class="btn" type="button" data-add="combo">Agregar combo al pedido</button>
-        </div>
-        <div class="combo-img"><img src="img/papas.jpg" alt="Canasto de papas fritas doradas" loading="lazy" width="622" height="350"></div>
-      </div>
-    </div>
   </section>
 
   <section class="sec" id="nosotros" style="padding-top:0">
@@ -475,7 +593,7 @@ footer .logo{color:var(--night-ink)}
   <div class="wrap">
     <a class="logo" href="#inicio"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
     <nav class="foot-links" aria-label="Más páginas">
-      <a href="carta.html">Carta completa</a>
+      <a href="carta.html" data-carta>Carta completa</a>
       <a href="propuesta.html">Ver propuesta →</a>
     </nav>
     <div class="socials">
@@ -500,6 +618,18 @@ footer .logo{color:var(--night-ink)}
     <small>Se abre WhatsApp con tu pedido ya escrito. Confirmamos por ahí.</small>
   </div>
 </aside>
+
+<div class="modal" id="cartaModal" role="dialog" aria-modal="true" aria-labelledby="cartaTitle" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="cartaTitle">Menú <span>a bordo</span></h3>
+      <button class="btn-sm opt" id="cartaPrint" type="button" hidden>Imprimir</button>
+      <a class="btn-sm opt" id="cartaNew" href="carta.html" target="_blank" rel="noopener">Abrir en otra pestaña</a>
+      <button class="x" id="cartaClose" type="button" aria-label="Cerrar carta"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <iframe id="cartaFrame" title="Carta de Aerosandwich"></iframe>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -564,6 +694,17 @@ const MENU = [
   ]}
 ];
 const COMBO = {id:"combo", name:"Combo Despegue", price:8990};
+/* Promociones: day = 1 (lunes) ... 6 (sábado) */
+const PROMOS = [
+  {id:"desayuno", name:"Desayuno Despegue (promo)", price:5990},
+  {id:"once", name:"Once a bordo (promo)", price:4990},
+  {id:"vd1", day:1, short:"Churrasco Italiano", name:"Churrasco Italiano (Vuelo del día)", price:5490, was:6490},
+  {id:"vd2", day:2, short:"Chacarero", name:"Chacarero (Vuelo del día)", price:5990, was:6990},
+  {id:"vd3", day:3, short:"2 Completos Italianos", name:"2 Completos Italianos (Vuelo del día)", price:4990, was:5980},
+  {id:"vd4", day:4, short:"Doble Bacon", name:"Doble Bacon (Vuelo del día)", price:6490, was:7490},
+  {id:"vd5", day:5, short:"Chorrillana + 2 bebidas", name:"Chorrillana + 2 bebidas (Vuelo del día)", price:13990, was:15990},
+  {id:"vd6", day:6, short:"Cappuccino + pie de limón", name:"Cappuccino + pie de limón (Vuelo del día)", price:4990, was:5790}
+];
 
 const BOARD = [
   {id:"churrasco", status:"Embarcando", cls:""},
@@ -576,7 +717,7 @@ const BOARD = [
 /* ====== helpers ====== */
 const $ = s => document.querySelector(s);
 const clp = n => "$" + n.toLocaleString("es-CL");
-const ITEMS = Object.fromEntries(MENU.flatMap(c => c.items.map(i => [i.id, i])).concat([[COMBO.id, COMBO]]));
+const ITEMS = Object.fromEntries(MENU.flatMap(c => c.items.map(i => [i.id, i])).concat([[COMBO.id, COMBO]], PROMOS.map(p => [p.id, p])));
 const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/\s+/g,"-");
 const icon = id => `<svg><use href="#${id}"/></svg>`;
 const waLink = text => `https://wa.me/${CONFIG.whatsapp}${text ? "?text=" + encodeURIComponent(text) : ""}`;
@@ -689,6 +830,48 @@ $("#hours").innerHTML = [1,2,3,4,5,6,0].map(d => {
 /* ====== QR ====== */
 try { new QRCode($("#qr"), {text: CONFIG.resenaGoogle, width:224, height:224, colorDark:"#121821", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.M}); } catch(e) {}
 
+/* ====== vuelo del día ====== */
+(() => {
+  const DN = ["","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  const today = new Date().getDay(); // 0 = domingo
+  $("#daily").innerHTML = PROMOS.filter(p => p.day).map(p => {
+    const isToday = p.day === today;
+    return `<div class="day${isToday ? " today" : ""}">
+      <span class="d">${DN[p.day]}</span>
+      <span class="n">${p.short}${isToday ? '<span class="hoy">Hoy</span>' : ""}</span>
+      <span class="pr">${clp(p.price)}<s>${clp(p.was)}</s></span>
+      <span class="slot">${isToday ? `<button class="add" type="button" data-add="${p.id}">${icon("i-plus")}Agregar</button>` : ""}</span>
+    </div>`;
+  }).join("") + `<p class="daily-note">${today === 0 ? "Hoy domingo estamos cerrados. Mañana: " + PROMOS.find(p => p.day === 1).short + "." : "El precio especial se puede pedir solo el día que corresponde."}</p>`;
+})();
+
+/* ====== carta en recuadro superpuesto ====== */
+const modal = $("#cartaModal"), frame = $("#cartaFrame");
+let lastFocus = null;
+function openCarta(){
+  if (!frame.getAttribute("src")) frame.setAttribute("src", "carta.html");
+  lastFocus = document.activeElement;
+  modal.classList.add("on"); modal.setAttribute("aria-hidden", "false");
+  document.documentElement.style.overflow = "hidden";
+  $("#cartaClose").focus();
+}
+function closeCarta(){
+  if (!modal.classList.contains("on")) return;
+  modal.classList.remove("on"); modal.setAttribute("aria-hidden", "true");
+  document.documentElement.style.overflow = "";
+  lastFocus && lastFocus.focus && lastFocus.focus();
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-carta]");
+  if (t) { e.preventDefault(); openCarta(); }
+});
+$("#cartaClose").addEventListener("click", closeCarta);
+modal.addEventListener("click", e => { if (e.target === modal) closeCarta(); });
+if (/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) || location.protocol === "file:") {
+  const pb = $("#cartaPrint"); pb.hidden = false;
+  pb.addEventListener("click", () => { try { frame.contentWindow.print(); } catch(e) {} });
+}
+
 /* ====== cart ====== */
 const cart = new Map();
 function addToCart(id, btn){
@@ -724,6 +907,6 @@ const openCart = on => { drawer.classList.toggle("on",on); scrim.classList.toggl
 $("#cartFab").addEventListener("click", () => openCart(true));
 $("#closeCart").addEventListener("click", () => openCart(false));
 scrim.addEventListener("click", () => openCart(false));
-document.addEventListener("keydown", e => { if (e.key === "Escape") openCart(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { openCart(false); closeCarta(); } });
 renderCart();
 </script>

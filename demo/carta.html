@@ -146,6 +146,11 @@ figure{margin:0}
   .s-foot{flex-direction:column;align-items:flex-start;gap:6px;font-size:.62rem;padding-top:12px}
 }
 
+/* inside the overlay on the main page: no toolbar of its own */
+.embed .top,.embed body::before{display:none}
+.embed .desk{padding-top:20px}
+@media screen and (max-width:900px){.embed .desk{padding-top:0}}
+
 @media print{
   @page{size:A4;margin:0}
   body{background:#fff}
@@ -166,6 +171,7 @@ figure{margin:0}
   </symbol>
 </svg>
 
+<script>try { if (window.self !== window.top) document.documentElement.classList.add("embed"); } catch(e) { document.documentElement.classList.add("embed"); }</script>
 <header class="top">
   <div class="in">
     <a class="logo" href="index.html"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
