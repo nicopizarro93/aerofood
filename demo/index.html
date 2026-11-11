@@ -267,6 +267,9 @@ p{margin:0}
 footer{background:var(--night);color:var(--night-muted);padding-block:40px 110px;font-size:.9rem}
 footer .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
 footer .logo{color:var(--night-ink)}
+.foot-links{display:flex;flex-wrap:wrap;gap:8px}
+.foot-links a{text-decoration:none;color:var(--night-ink);font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:inset 0 0 0 1.5px rgba(242,239,232,.25)}
+.foot-links a:hover{box-shadow:inset 0 0 0 1.5px var(--accent);color:var(--accent)}
 .socials{display:flex;gap:10px}
 .socials a{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);color:var(--night-ink)}
 .socials a:hover{background:var(--accent);color:var(--accent-ink)}
@@ -471,6 +474,10 @@ footer .logo{color:var(--night-ink)}
 <footer>
   <div class="wrap">
     <a class="logo" href="#inicio"><span class="logo-mark"><svg><use href="#i-plane"/></svg></span><span class="logo-word">Aero<span>sandwich</span></span></a>
+    <nav class="foot-links" aria-label="Más páginas">
+      <a href="carta.html">Carta completa</a>
+      <a href="propuesta.html">Ver propuesta →</a>
+    </nav>
     <div class="socials">
       <a class="js-ig" href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a>
       <a class="js-wa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#i-wa"/></svg></a>
@@ -580,7 +587,8 @@ document.querySelectorAll(".js-ig").forEach(a => a.href = `https://instagram.com
 document.querySelectorAll(".js-maps").forEach(a => a.href = CONFIG.mapa);
 document.querySelectorAll(".js-review").forEach(a => a.href = CONFIG.resenaGoogle);
 if (!/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname) && location.protocol !== "file:") {
-  document.querySelectorAll('a[href="carta.html"]').forEach(a => { a.href = "https://claude.ai/artifact/Fiw31rPrUV5dzNZbzs5JzH"; a.target = "_blank"; a.rel = "noopener"; });
+  const MAP = {"carta.html":"https://claude.ai/artifact/Fiw31rPrUV5dzNZbzs5JzH","propuesta.html":"https://claude.ai/artifact/Mofz8Qjoghx8CT8Yxu1a81"};
+  document.querySelectorAll("a[href]").forEach(a => { const u = MAP[a.getAttribute("href")]; if (u) { a.href = u; a.target = "_blank"; a.rel = "noopener"; } });
 }
 $("#addr").textContent = CONFIG.direccion; $("#comuna").textContent = CONFIG.comuna;
 $("#waText").textContent = CONFIG.whatsappTexto; $("#igText").textContent = "@" + CONFIG.instagram;
